@@ -28,7 +28,9 @@
                 <td>{{ $user->role }}</td>
                 <td class="text-center">
                   <div class="d-flex justify-content-center" style="gap: 0.5rem;">
-                    <button class="btn btn-primary btn-sm">Edit</button>
+                    <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('user.edit', $user->id) }}'">Edit</button>
+
+
                     <button class="btn btn-danger btn-sm">Delete</button>
                   </div>
                 </td>

@@ -17,7 +17,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::findorFail($id);
-        return view('user.edit', compact('user'));
+        return view('users.userEdit', compact('user'));
     }
 
     /**
