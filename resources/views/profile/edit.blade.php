@@ -36,6 +36,7 @@
                 <div class="card-header">
                     <h5 class="title">{{ __('Password') }}</h5>
                 </div>
+                
                 <form method="post" action="{{ route('profile.password') }}" autocomplete="off">
                     <div class="card-body">
                         @csrf
@@ -84,22 +85,10 @@
                         </div>
                     </p>
                     <div class="card-description">
-                        {{ __('Do not be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...') }}
+                        {{ __('Do not be scared of the truth because we need to restart the human foundation in truth And I love you like diddy loves baby oil back is...') }}
                     </div>
                 </div>
-                <div class="card-footer">
-                    <div class="button-container">
-                        <button class="btn btn-icon btn-round btn-facebook">
-                            <i class="fab fa-facebook"></i>
-                        </button>
-                        <button class="btn btn-icon btn-round btn-twitter">
-                            <i class="fab fa-twitter"></i>
-                        </button>
-                        <button class="btn btn-icon btn-round btn-google">
-                            <i class="fab fa-google-plus"></i>
-                        </button>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>

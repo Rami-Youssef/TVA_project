@@ -18,5 +18,14 @@ class UserController extends Controller
     {
         return view('users.index', ['users' => $model->paginate(15)]);
     }
+
+    
+
+    public function getAllUsers()
+    {
+        $users = User::all();
+        return view('pages.tables', compact('users'));
+    
+    }
     
 }

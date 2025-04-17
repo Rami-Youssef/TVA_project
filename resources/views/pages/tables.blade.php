@@ -1,9 +1,13 @@
 @extends('layouts.app', ['page' => __('Tables'), 'pageSlug' => 'tables'])
-{{DB::table('your_table_name')->get();}}<div class="row">
+{
+  $users = 
+}
+@section('content')
+<div class="row">
   <div class="col-md-12">
     <div class="card ">
       <div class="card-header">
-        <h4 class="card-title"> Simple Table</h4>
+        <h4 class="card-title"> Tableau d'utilisateur</h4>
       </div>
       <div class="card-body">
         <div class="table-responsive">
@@ -28,20 +32,23 @@
               </tr>
             </thead>
             <tbody>
+              @foreach ($users as $user)
               <tr>
                 <td>
-                  Minerva Hooper
+                   {{ $user->id }}
                 </td>
                 <td>
-                  Curaçao
+                  {{ $user->name }}
                 </td>
                 <td>
-                  Sinaai-Waas
+                  {{ $user->email }}
                 </td>
                 <td class="text-center">
-                  $23,789
+                  {{ $user->role }}
                 </td>
               </tr>
+              @endforeach
+              
             </tbody>
           </table>
         </div>
