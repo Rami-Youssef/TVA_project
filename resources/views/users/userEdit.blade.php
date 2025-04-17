@@ -7,13 +7,13 @@
                 <div class="card-header">
                     <h5 class="title">{{ __('Edit Profile') }}</h5>
                 </div>
-                <form method="post" action="{{ route('user.update') }}" autocomplete="off">
+                <form method="post" action="{{ route('user.update', $user->id) }}" autocomplete="off">
                     <div class="card-body">
                             @csrf
                             @method('put')
 
                             @include('alerts.success')
-
+                            <input type="text" name="id" class="form-control" value="{{ $user->id }}" hidden>
                             <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
                                 <label>{{ __('Name') }}</label>
                                 <input type="text" name="name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="{{ __('Name') }}" value="{{ $user->name }}">
@@ -24,6 +24,12 @@
                                 <label>{{ __('Email address') }}</label>
                                 <input type="email" name="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="{{ __('Email address') }}" value="{{$user->email}}">
                                 @include('alerts.feedback', ['field' => 'email'])
+                            </div>
+
+                            <div class="form-group{{ $errors->has('role') ? ' has-danger' : '' }}">
+                                <label>{{ __('role') }}</label>
+                                <input type="text" name="role" class="form-control{{ $errors->has('role') ? ' is-invalid' : '' }}" placeholder="{{ __('role') }}" value="{{$user->role}}">
+                                @include('alerts.feedback', ['field' => 'role'])
                             </div>
                     </div>
                     <div class="card-footer">

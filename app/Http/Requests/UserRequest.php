@@ -27,7 +27,10 @@ class UserRequest extends FormRequest
     {
         return [
             'name' => ['required', 'min:3'],
-            'email' => ['required', 'email',Rule::unique(User::find($this->input('id'))?->id)],
+            'email' => ['required', 'email',
+            Rule::unique('users', 'email')->ignore($this->input('id'))
+
+        ],
             'role' => ['required', Rule::in(['super_admin' ,'admin', 'user'])],
         ];
     }

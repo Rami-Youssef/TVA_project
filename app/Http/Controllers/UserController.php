@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\PasswordRequest;
+use App\Http\Requests\UserRequest;
 use App\Models\User;
 
 class UserController extends Controller
@@ -26,12 +27,12 @@ class UserController extends Controller
      * @param  \App\Http\Requests\ProfileRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(ProfileRequest $request)
-    {
+    public function update(UserRequest $request, User $user)
+{
+    $user->update($request->validated()); // Use validated data from UserRequest
+    return redirect()->route('user.getAllUsers')->withStatus(__('User successfully updated.'));
+}
 
-        $user = User::findorFail($request->id)->update($request->all());
-        return redirect()->route('user.getAllUsers')->withStatus(__('User successfully updated.'));
-    }
 
     /**
      * Change the password
@@ -39,10 +40,9 @@ class UserController extends Controller
      * @param  \App\Http\Requests\PasswordRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function password(PasswordRequest $request)
+    public function password(UserRequest $request, User $user)
     {
-        $user = User::findorFail($request->id)->update(['password' => Hash::make($request->get('password'))]);
-
+        $user->update(['password' => Hash::make($request->get('password'))]); 
         return redirect()->route('user.getAllUsers')->withStatus(__('User password successfully updated.'));
     }
 

@@ -31,7 +31,7 @@
                     <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('user.edit', $user->id) }}'">Edit</button>
 
 
-                    <button class="btn btn-danger btn-sm">Delete</button>
+                    <button class="btn btn-danger btn-sm"  onclick="window.location.href='{{ route('user.delete', $user->id) }}'">Delete</button>
                   </div>
                 </td>
               </tr>
