@@ -43,7 +43,7 @@
                         @method('put')
 
                         @include('alerts.success', ['key' => 'password_status'])
-
+                        <input type="text" name="id" class="form-control" value="{{ $user->id }}" hidden>
                         <div class="form-group{{ $errors->has('old_password') ? ' has-danger' : '' }}">
                             <label>{{ __('Current Password') }}</label>
                             <input type="password" name="old_password" class="form-control{{ $errors->has('old_password') ? ' is-invalid' : '' }}" placeholder="{{ __('Current Password') }}" value="" required>
