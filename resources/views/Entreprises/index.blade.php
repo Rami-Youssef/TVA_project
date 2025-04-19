@@ -1,39 +1,35 @@
-@extends('layouts.app', ['page' => __('Tables'), 'pageSlug' => 'tables'])
+@extends('layouts.app', ['page' => __('Sociétés'), 'pageSlug' => 'entreprises'])
 
 @section('content')
 <div class="row">
   <div class="col-md-12">
-    <div class="card ">
+    <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
-        <h4 class="card-title mb-0">Tableau d'Entreprise</h4>
-
+        <h4 class="card-title mb-0">{{ __('Liste des Sociétés') }}</h4>
         @if(Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin')
           <button class="btn btn-success" onclick="window.location.href='{{ route('entreprise.create') }}'">
             <i class="fas fa-plus"></i>
           </button>
         @endif
       </div>
-      
       <div class="card-body">
         <div class="table-responsive">
           <table class="table tablesorter">
             <thead class="text-primary">
               <tr>
-                <th>id</th>
-                <th>Nom</th>
-                <th>Siège Social</th>
-                <th>Forme Juridique</th>
-                <th>Activité Principale</th>
-                <th>Numéro Société</th>
+                <th>{{ __('Nom') }}</th>
+                <th>{{ __('Siège Social') }}</th>
+                <th>{{ __('Forme Juridique') }}</th>
+                <th>{{ __('Activité') }}</th>
+                <th>{{ __('N° Société') }}</th>
                 @if(Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin')
-                  <th class="text-center">Action</th>
+                  <th class="text-center">{{ __('Actions') }}</th>
                 @endif
               </tr>
             </thead>
             <tbody>
               @foreach ($entreprises as $entreprise)
               <tr>
-                <td>{{ $entreprise->id }}</td>
                 <td>{{ $entreprise->nom }}</td>
                 <td>{{ $entreprise->siege_social }}</td>
                 <td>{{ $entreprise->form_juridique }}</td>
@@ -43,12 +39,16 @@
                 <td class="text-center">
                   <div class="d-flex justify-content-center" style="gap: 0.5rem;">
                     @if(Auth::user()->role === 'super_admin')
-                      <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('entreprise.edit', $entreprise->id) }}'">Edit</button>
+                      <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('entreprise.edit', $entreprise->id) }}'">
+                        Edit
+                      </button>
                       <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $entreprise->id }}">
                         Delete
                       </button>
                     @elseif(Auth::user()->role === 'admin')
-                      <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('entreprise.edit', $entreprise->id) }}'">Edit</button>
+                      <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('entreprise.edit', $entreprise->id) }}'">
+                        Edit
+                      </button>
                     @endif
                   </div>
                 </td>
@@ -59,7 +59,7 @@
           </table>
         </div>
 
-        <!-- Modals -->
+        <!-- Delete Confirmation Modals -->
         @foreach ($entreprises as $entreprise)
         <div class="modal fade" id="confirmDeleteModal-{{ $entreprise->id }}" tabindex="-1" aria-hidden="true">
           <div class="modal-dialog">

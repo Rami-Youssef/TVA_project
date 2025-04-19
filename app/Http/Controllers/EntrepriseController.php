@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Entreprise;
 use App\Http\Requests\EntrepriseRequest; // You can create this request as needed
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class EntrepriseController extends Controller
 {
@@ -78,6 +79,10 @@ class EntrepriseController extends Controller
      */
     public function destroy(Request $request, Entreprise $entreprise)
     {
+        if (!Hash::check($request->password, auth()->user()->password)) {
+            return back()->withErrors(['password' => 'Incorrect password.']);
+        }
+
         $entreprise->delete();
 
         return redirect()->route('entreprise.getAllEntreprises')->withStatus(__('Entreprise successfully deleted.'));
