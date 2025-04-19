@@ -2,14 +2,42 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateRequest;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\PasswordRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    
+    /**
+     * Show the form for creating a new user.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function create()
+    {
+        return view('users.create');
+    }
+    /**
+     * Store a newly created user in storage.
+     *
+     * @param  \App\Http\Requests\UserRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(CreateRequest $request)
+    {
+        $user = User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => bcrypt($request->input('password')),
+            'role' => $request->input('role'),
+        ]);
+        return redirect()->route('user.getAllUsers')->withStatus(__('User successfully created.'));
+    }
     /**
      * Show the form for editing the profile.
      *
@@ -40,15 +68,19 @@ class UserController extends Controller
      * @param  \App\Http\Requests\PasswordRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function password(UserRequest $request, User $user)
+    public function password(PasswordRequest $request, User $user)
     {
         $user->update(['password' => Hash::make($request->get('password'))]); 
         return redirect()->route('user.getAllUsers')->withStatus(__('User password successfully updated.'));
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, User $user)
     {
-        User::findorFail($id)->delete();
+        if (!Hash::check($request->password, auth()->user()->password)) {
+            return back()->withErrors(['password' => 'Incorrect password.']);
+        }
+    
+        $user->delete();
         return redirect()->route('user.getAllUsers')->withStatus(__('User successfully deleted.'));
     }
 

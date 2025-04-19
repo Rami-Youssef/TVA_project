@@ -5,10 +5,10 @@
   <div class="col-md-12">
     <div class="card ">
       <div class="card-header d-flex justify-content-between align-items-center">
-        <h4 class="card-title mb-0">Tableau d'utilisateur</h4>
+        <h4 class="card-title mb-0">Tableau d'Entreprise</h4>
 
         @if(Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin')
-          <button class="btn btn-success" onclick="window.location.href='{{ route('user.create') }}'">
+          <button class="btn btn-success" onclick="window.location.href='{{ route('entreprise.create') }}'">
             <i class="fas fa-plus"></i>
           </button>
         @endif
@@ -20,31 +20,35 @@
             <thead class="text-primary">
               <tr>
                 <th>id</th>
-                <th>Name</th>
-                <th>email</th>
-                <th>role</th>
+                <th>Nom</th>
+                <th>Siège Social</th>
+                <th>Forme Juridique</th>
+                <th>Activité Principale</th>
+                <th>Numéro Société</th>
                 @if(Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin')
                   <th class="text-center">Action</th>
                 @endif
               </tr>
             </thead>
             <tbody>
-              @foreach ($users as $user)
+              @foreach ($entreprises as $entreprise)
               <tr>
-                <td>{{ $user->id }}</td>
-                <td>{{ $user->name }}</td>
-                <td>{{ $user->email }}</td>
-                <td>{{ $user->role }}</td>
+                <td>{{ $entreprise->id }}</td>
+                <td>{{ $entreprise->nom }}</td>
+                <td>{{ $entreprise->siege_social }}</td>
+                <td>{{ $entreprise->form_juridique }}</td>
+                <td>{{ $entreprise->activite_principale }}</td>
+                <td>{{ $entreprise->numero_societe }}</td>
                 @if(Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin')
                 <td class="text-center">
                   <div class="d-flex justify-content-center" style="gap: 0.5rem;">
                     @if(Auth::user()->role === 'super_admin')
-                      <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('user.edit', $user->id) }}'">Edit</button>
-                      <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $user->id }}">
+                      <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('entreprise.edit', $entreprise->id) }}'">Edit</button>
+                      <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $entreprise->id }}">
                         Delete
                       </button>
                     @elseif(Auth::user()->role === 'admin')
-                      <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('user.edit', $user->id) }}'">Edit</button>
+                      <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('entreprise.edit', $entreprise->id) }}'">Edit</button>
                     @endif
                   </div>
                 </td>
@@ -56,10 +60,10 @@
         </div>
 
         <!-- Modals -->
-        @foreach ($users as $user)
-        <div class="modal fade" id="confirmDeleteModal-{{ $user->id }}" tabindex="-1" aria-hidden="true">
+        @foreach ($entreprises as $entreprise)
+        <div class="modal fade" id="confirmDeleteModal-{{ $entreprise->id }}" tabindex="-1" aria-hidden="true">
           <div class="modal-dialog">
-            <form method="POST" action="{{ route('user.delete', $user->id) }}">
+            <form method="POST" action="{{ route('entreprise.delete', $entreprise->id) }}">
               @csrf
               @method('DELETE')
               <div class="modal-content" style="background-color: rgb(82, 95, 127); color: white;">

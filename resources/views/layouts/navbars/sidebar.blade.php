@@ -9,7 +9,7 @@
             <li>
                 <a data-toggle="collapse" href="#laravel-examples" aria-expanded="true">
                     <i class="tim-icons icon-money-coins" ></i>
-                    <span class="nav-link-text" >{{ __('Entreprise TVA') }}</span>
+                    <span class="nav-link-text" >{{ __('Categories de TVA') }}</span>
                     <b class="caret mt-1"></b>
                 </a>
 
@@ -18,24 +18,39 @@
                         <li @if ($pageSlug == 'profile') class="active " @endif>
                             <a href="{{ route('profile.edit')  }}">
                                 <i class="tim-icons icon-single-02"></i>
-                                <p>{{ __('User Profile') }}</p>
+                                <p>{{ __('TVA Trimestrielle') }}</p>
+                            </a>
+                        </li>
+                        <li @if ($pageSlug == 'profile') class="active " @endif>
+                            <a href="{{ route('profile.edit')  }}">
+                                <i class="tim-icons icon-single-02"></i>
+                                <p>{{ __('TVA Mensuelle') }}</p>
+                            </a>
+                        </li>
+                        <li @if ($pageSlug == 'profile') class="active " @endif>
+                            <a href="{{ route('profile.edit')  }}">
+                                <i class="tim-icons icon-single-02"></i>
+                                <p>{{ __('TVA Annuelle') }}</p>
                             </a>
                         </li>
                     </ul>
+                    
                 </div>
             </li>
-            <li @if ($pageSlug == 'icons') class="active " @endif>
-                <a href="{{ route('pages.icons') }}">
-                    <i class="tim-icons icon-atom"></i>
-                    <p>{{ __('Icons') }}</p>
+            <li @if ($pageSlug == 'tables') class="active " @endif>
+                <a href="{{ route('entreprise.getAllEntreprises') }}">
+                    <i class="bi bi-building"></i>
+                    <p>{{ __('Liste de Socités') }}</p>
                 </a>
             </li>
+            @if (auth()->user()->role !== 'user')
             <li @if ($pageSlug == 'tables') class="active " @endif>
                 <a href="{{ route('user.getAllUsers') }}">
                     <i class="tim-icons icon-single-02"></i>
                     <p>{{ __('User List') }}</p>
                 </a>
             </li>
+            @endif
         </ul>
     </div>
 </div>
