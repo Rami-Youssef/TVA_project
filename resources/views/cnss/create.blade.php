@@ -17,7 +17,7 @@
                         <select name="entreprise_id" class="form-control{{ $errors->has('entreprise_id') ? ' is-invalid' : '' }}" required>
                             <option value="">Sélectionnez une entreprise</option>
                             @foreach($entreprises as $entreprise)
-                                <option value="{{ $entreprise->id }}">{{ $entreprise->name }}</option>
+                                <option value="{{ $entreprise->id }}">{{ $entreprise->nom }}</option>
                             @endforeach
                         </select>
                         @include('alerts.feedback', ['field' => 'entreprise_id'])
