@@ -11,9 +11,9 @@ class TvaDeclaration extends Model
 
     protected $fillable = [
         'entreprise_id',
-        'type',          // e.g., 'mensuelle', 'trimestrielle', 'annuelle'
-        'periode',       // e.g., '2025-Q1', '2025-01', '2025'
-        'montant',       // Total TVA amount
+        'type',        
+        'periode',       
+        'montant',       
         'date_declaration',
     ];
 

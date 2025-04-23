@@ -40,6 +40,13 @@
                     <p>{{ __('Sociétés') }}</p>
                 </a>
             </li>
+            <li @if ($pageSlug === 'CNSS') class="active" @endif>
+                <a href="{{ route('cnss.index') }}">
+                    <i class="tim-icons icon-notes"></i>
+                    <p>{{ __('CNSS') }}</p>
+                </a>
+            </li>
+
             @if (auth()->user()->role !== 'user')
             <li @if ($pageSlug === 'users') class="active" @endif>
                 <a href="{{ route('user.getAllUsers') }}">

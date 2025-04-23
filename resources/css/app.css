@@ -1,0 +1,114 @@
+/* Custom select dropdown styles */
+body .form-control:not(.form-control-alternative),
+body select.form-control,
+body .custom-select,
+.dark-select,
+body .form-group select.form-control,
+body .input-group select.form-control,
+body .card select.form-control,
+body form select.form-control {
+    color: #ffffff !important;
+    background: #27293d !important;
+    border: 1px solid #2b3553 !important;
+    cursor: pointer !important;
+    height: auto !important;
+    padding: 10px 12px !important;
+    z-index: 1021 !important;
+    position: relative !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 0.75rem center !important;
+    background-size: 16px 12px !important;
+}
+
+body select.form-control option,
+body .custom-select option,
+.dark-select option,
+body .form-group select.form-control option,
+body .input-group select.form-control option,
+body .card select.form-control option,
+body form select.form-control option {
+    color: #ffffff !important;
+    background-color: #27293d !important;
+    padding: 10px 12px !important;
+}
+
+body select.form-control option:hover,
+body select.form-control option:focus,
+body .custom-select option:hover,
+body .custom-select option:focus,
+body select.form-control option:checked,
+body .custom-select option:checked {
+    color: #ffffff !important;
+    background-color: #e14eca !important;
+}
+
+body select.form-control:focus,
+body .custom-select:focus,
+.dark-select:hover,
+.dark-select:focus,
+body .form-group select.form-control:hover,
+body .form-group select.form-control:focus,
+body .input-group select.form-control:hover,
+body .input-group select.form-control:focus,
+body .card select.form-control:hover,
+body .card select.form-control:focus,
+body form select.form-control:hover,
+body form select.form-control:focus {
+    border-color: #e14eca !important;
+    box-shadow: 0 0 0 1px #e14eca !important;
+    outline: none !important;
+}
+
+/* Handle disabled state */
+body select.form-control:disabled,
+body select.form-control[readonly],
+body .custom-select:disabled,
+body .custom-select[readonly],
+.dark-select:disabled,
+.dark-select[readonly] {
+    background-color: rgba(39, 41, 61, 0.8) !important;
+    opacity: 0.7 !important;
+    cursor: not-allowed !important;
+}
+
+/* Prevent theme background interference */
+body select.form-control:-webkit-autofill,
+body select.form-control:-webkit-autofill:hover,
+body select.form-control:-webkit-autofill:focus,
+body .custom-select:-webkit-autofill,
+body .custom-select:-webkit-autofill:hover,
+body .custom-select:-webkit-autofill:focus {
+    -webkit-text-fill-color: #ffffff !important;
+    -webkit-box-shadow: 0 0 0px 1000px #27293d inset !important;
+    transition: background-color 5000s ease-in-out 0s !important;
+}
+
+/* Additional select element fixes */
+body select.form-control {
+    text-indent: 1px !important;
+    text-overflow: '' !important;
+}
+
+/* Specific styles for form_juridique select */
+body select[name="form_juridique"] {
+    min-width: 280px !important;
+    max-width: 100% !important;
+    text-overflow: ellipsis !important;
+}
+
+body select[name="form_juridique"] option {
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    padding: 12px !important;
+    line-height: 1.4 !important;
+}
+
+/* Specific styles for TVA declaration type select */
+body select[name="type"] {
+    min-width: 200px !important;
+    text-transform: capitalize !important;
+}

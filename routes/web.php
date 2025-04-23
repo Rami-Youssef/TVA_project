@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EntrepriseController;
+use App\Http\Controllers\CnssController;
 
 Route::get('/', function () {
     return redirect(route('user.getAllUsers'));
@@ -23,6 +24,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('tva-mensuelle', ['as' => 'tva-declaration.mensuelle', 'uses' => 'App\Http\Controllers\TvaDeclarationController@getMensuelle']);
     Route::get('tva-trimestrielle', ['as' => 'tva-declaration.trimestrielle', 'uses' => 'App\Http\Controllers\TvaDeclarationController@getTrimestrielle']);
     Route::get('tva-annuelle', ['as' => 'tva-declaration.annuelle', 'uses' => 'App\Http\Controllers\TvaDeclarationController@getAnnuelle']);
+
+    // CNSS Routes
+    Route::get('cnss', [CnssController::class, 'index'])->name('cnss.index');
+    Route::get('cnss/create', [CnssController::class, 'create'])->name('cnss.create');
+    Route::post('cnss', [CnssController::class, 'store'])->name('cnss.store');
+    Route::get('cnss/{cnss}/edit', [CnssController::class, 'edit'])->name('cnss.edit');
+    Route::put('cnss/{cnss}', [CnssController::class, 'update'])->name('cnss.update');
+    Route::delete('cnss/{cnss}', [CnssController::class, 'destroy'])->name('cnss.delete');
 });
 
 Route::group(['middleware' => ['auth', 'AdminPrivilege']], function () {
