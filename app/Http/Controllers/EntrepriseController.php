@@ -95,7 +95,7 @@ class EntrepriseController extends Controller
      */
     public function getAllEntreprises()
     {
-        $entreprises = Entreprise::all();
+        $entreprises = Entreprise::paginate(10);
         return view('entreprises.index', compact('entreprises'));
     }
 }

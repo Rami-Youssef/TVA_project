@@ -1,4 +1,4 @@
-@extends('layouts.app', ['page' => __('Déclarations CNSS'), 'pageSlug' => 'CNSS'])
+@extends('layouts.app', ['page' => __('Liste des États'), 'pageSlug' => 'etats'])
 
 @section('content')
     <div class="row">
@@ -7,14 +7,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-8">
-                            <h4 class="card-title">Déclarations CNSS</h4>
-                        </div>
-                        <div class="col-4 text-right">
-                            @if(Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin')
-                                <a href="{{ route('cnss.create') }}" class="btn btn-sm btn-primary">
-                                    {{ __('Ajouter une déclaration') }}
-                                </a>
-                            @endif
+                            <h4 class="card-title">Liste des États CNSS</h4>
                         </div>
                     </div>
                 </div>

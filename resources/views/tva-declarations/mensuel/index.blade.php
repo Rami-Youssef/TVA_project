@@ -57,6 +57,11 @@
                     </table>
                 </div>
 
+                <!-- Pagination Links -->
+                <div class="d-flex justify-content-center mt-4">
+                    {{ $declarations->links() }}
+                </div>
+
                 <!-- Delete Confirmation Modals -->
                 @foreach($declarations as $declaration)
                 <div class="modal fade" id="confirmDeleteModal-{{ $declaration->id }}" tabindex="-1" aria-hidden="true">

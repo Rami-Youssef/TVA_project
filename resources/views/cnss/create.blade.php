@@ -12,16 +12,22 @@
                     @csrf
                     @include('alerts.success')
 
+                    @if(!$selectedEntrepriseId)
                     <div class="form-group{{ $errors->has('entreprise_id') ? ' has-danger' : '' }}">
                         <label>{{ __('Entreprise') }}</label>
                         <select name="entreprise_id" class="form-control{{ $errors->has('entreprise_id') ? ' is-invalid' : '' }}" required>
                             <option value="">Sélectionnez une entreprise</option>
                             @foreach($entreprises as $entreprise)
-                                <option value="{{ $entreprise->id }}">{{ $entreprise->nom }}</option>
+                                <option value="{{ $entreprise->id }}" {{ $selectedEntrepriseId == $entreprise->id ? 'selected' : '' }}>
+                                    {{ $entreprise->nom }}
+                                </option>
                             @endforeach
                         </select>
                         @include('alerts.feedback', ['field' => 'entreprise_id'])
                     </div>
+                    @else
+                        <input type="hidden" name="entreprise_id" value="{{ $selectedEntrepriseId }}">
+                    @endif
 
                     <div class="form-group{{ $errors->has('Mois') ? ' has-danger' : '' }}">
                         <label>{{ __('Mois') }}</label>
@@ -60,9 +66,8 @@
                     <div class="form-group{{ $errors->has('etat') ? ' has-danger' : '' }}">
                         <label>{{ __('État') }}</label>
                         <select name="etat" class="form-control{{ $errors->has('etat') ? ' is-invalid' : '' }}" required>
-                            <option value="en_attente">En attente</option>
-                            <option value="valide">Validé</option>
-                            <option value="refuse">Refusé</option>
+                            <option value="valide">Déclaré</option>
+                            <option value="non_valide" selected>Non déclaré</option>
                         </select>
                         @include('alerts.feedback', ['field' => 'etat'])
                     </div>

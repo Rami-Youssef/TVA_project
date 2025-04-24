@@ -1,4 +1,4 @@
-@extends('layouts.app', ['page' => __('Déclarations CNSS'), 'pageSlug' => 'CNSS'])
+@extends('layouts.app', ['page' => __('Suivi des Déclarations CNSS'), 'pageSlug' => 'suivi'])
 
 @section('content')
     <div class="row">
@@ -7,11 +7,14 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-8">
-                            <h4 class="card-title">Déclarations CNSS</h4>
+                            <h4 class="card-title">Déclarations CNSS pour {{ $entreprise->nom }}</h4>
                         </div>
                         <div class="col-4 text-right">
+                            <a href="{{ route('suivi.index') }}" class="btn btn-sm btn-primary">
+                                {{ __('Retour à la liste') }}
+                            </a>
                             @if(Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin')
-                                <a href="{{ route('cnss.create') }}" class="btn btn-sm btn-primary">
+                                <a href="{{ route('cnss.create', ['entreprise_id' => $entreprise->id]) }}" class="btn btn-sm btn-success">
                                     {{ __('Ajouter une déclaration') }}
                                 </a>
                             @endif
@@ -24,7 +27,6 @@
                         <table class="table tablesorter" id="">
                             <thead class="text-primary">
                                 <tr>
-                                    <th>Entreprise</th>
                                     <th>Mois</th>
                                     <th>Année</th>
                                     <th>Nombre de Salariés</th>
@@ -37,7 +39,6 @@
                             <tbody>
                                 @foreach ($declarations as $declaration)
                                     <tr>
-                                        <td>{{ $declaration->entreprise->nom ?? 'N/A' }}</td>
                                         <td>{{ $declaration->french_month }}</td>
                                         <td>{{ $declaration->annee }}</td>
                                         <td>{{ $declaration->Nbr_Salries }}</td>

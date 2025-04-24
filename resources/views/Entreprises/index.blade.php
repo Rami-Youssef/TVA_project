@@ -39,6 +39,9 @@
                 <td class="text-center">
                   <div class="d-flex justify-content-center" style="gap: 0.5rem;">
                     @if(Auth::user()->role === 'super_admin')
+                      <button class="btn btn-info btn-sm" onclick="window.location.href='{{ route('cnss.create', ['entreprise_id' => $entreprise->id]) }}'">
+                        CNSS
+                      </button>
                       <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('entreprise.edit', $entreprise->id) }}'">
                         Edit
                       </button>
@@ -46,6 +49,9 @@
                         Delete
                       </button>
                     @elseif(Auth::user()->role === 'admin')
+                      <button class="btn btn-info btn-sm" onclick="window.location.href='{{ route('cnss.create', ['entreprise_id' => $entreprise->id]) }}'">
+                        CNSS
+                      </button>
                       <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('entreprise.edit', $entreprise->id) }}'">
                         Edit
                       </button>
@@ -90,5 +96,10 @@
       </div>
     </div>
   </div>
+</div>
+
+<!-- Pagination Links -->
+<div class="d-flex justify-content-center mt-4">
+  {{ $entreprises->links() }}
 </div>
 @endsection

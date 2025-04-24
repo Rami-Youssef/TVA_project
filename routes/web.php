@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EntrepriseController;
 use App\Http\Controllers\CnssController;
+use App\Http\Controllers\EtatsController;
+use App\Http\Controllers\SuiviController;
 
 Route::get('/', function () {
     return redirect(route('user.getAllUsers'));
@@ -32,6 +34,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('cnss/{cnss}/edit', [CnssController::class, 'edit'])->name('cnss.edit');
     Route::put('cnss/{cnss}', [CnssController::class, 'update'])->name('cnss.update');
     Route::delete('cnss/{cnss}', [CnssController::class, 'destroy'])->name('cnss.delete');
+    
+    // Etats and Suivi Routes
+    Route::get('etats', [EtatsController::class, 'index'])->name('etats.index');
+    Route::get('suivi', [SuiviController::class, 'index'])->name('suivi.index');
+    Route::get('suivi/{entreprise}', [SuiviController::class, 'show'])->name('suivi.show');
 });
 
 Route::group(['middleware' => ['auth', 'AdminPrivilege']], function () {

@@ -68,9 +68,9 @@
                                 <div class="form-group{{ $errors->has('etat') ? ' has-danger' : '' }}">
                                     <label>{{ __('État') }}</label>
                                     <select name="etat" class="form-control{{ $errors->has('etat') ? ' is-invalid' : '' }}" required>
-                                        @foreach(['en_attente', 'valide', 'refuse'] as $etat)
-                                            <option value="{{ $etat }}" {{ old('etat', isset($cnss) ? $cnss->etat : 'en_attente') == $etat ? 'selected' : '' }}>
-                                                {{ ucfirst($etat) }}
+                                        @foreach(['Déclaré', 'Non déclaré'] as $etat)
+                                            <option value="{{ $etat }}" {{ old('etat', isset($cnss) ? $cnss->etat : 'Non déclaré') == $etat ? 'selected' : '' }}>
+                                                {{ $etat }}
                                             </option>
                                         @endforeach
                                     </select>

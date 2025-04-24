@@ -3,74 +3,93 @@
 namespace Database\Seeders;
 
 use App\Models\Entreprise;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class EntrepriseSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
-        // Example 1
-        Entreprise::create([
-            'id' => 1,
-            'nom' => 'TechnoCorp',
-            'siege_social' => '123 Silicon Valley, San Francisco, CA',
-            'form_juridique' => 'Société par Actions Simplifiée (SAS)',
-            'activite_principale' => 'Développement de logiciels',
-            'numero_societe' => '5678901234',
-        ]);
+        // Keep the original companies
+        Entreprise::firstOrCreate(
+            ['id' => 1],
+            [
+                'nom' => 'Tech Solutions Maroc',
+                'siege_social' => 'Casablanca, Maroc',
+                'form_juridique' => 'SARL',
+                'activite_principale' => 'Développement informatique',
+                'numero_societe' => 'RC12345',
+            ]
+        );
         
+        Entreprise::firstOrCreate(
+            ['id' => 2],
+            [
+                'nom' => 'Maroc Consulting Group',
+                'siege_social' => 'Rabat, Maroc',
+                'form_juridique' => 'SA',
+                'activite_principale' => 'Conseil en management',
+                'numero_societe' => 'RC67890',
+            ]
+        );
+        
+        Entreprise::firstOrCreate(
+            ['id' => 3],
+            [
+                'nom' => 'Atlas Transport',
+                'siege_social' => 'Marrakech, Maroc',
+                'form_juridique' => 'SARL',
+                'activite_principale' => 'Transport et logistique',
+                'numero_societe' => 'RC24680',
+            ]
+        );
+        
+        Entreprise::firstOrCreate(
+            ['id' => 4],
+            [
+                'nom' => 'Maghreb Industries',
+                'siege_social' => 'Tanger, Maroc',
+                'form_juridique' => 'SA',
+                'activite_principale' => 'Industrie manufacturière',
+                'numero_societe' => 'RC13579',
+            ]
+        );
 
-        // Example 2
-        Entreprise::create([
-            'id' => 2,
-            'nom' => 'GreenEnergy Solutions',
-            'siege_social' => '45 Green Road, Paris, France',
-            'form_juridique' => 'Société à Responsabilité Limitée (SARL)',
-            'activite_principale' => 'Production d’énergie renouvelable',
-            'numero_societe' => '1234567890',
-        ]);
+        // Add 16 more companies to reach 20 total
+        $companyNames = [
+            'Maroc Digital Services', 'Atlas Construction', 'Sahara Textiles', 
+            'Casablanca Food Processing', 'Maghreb Telecom', 'Fes Automotive Parts',
+            'Marrakech Tourism Agency', 'Rabat Medical Supplies', 'Agadir Fishing Co.',
+            'Tanger Shipping Lines', 'Moroccan Agricultural Exports', 'Tetouan Tech Academy',
+            'Oujda Mining Corporation', 'Kenitra Electronics', 'Mohammedia Energy Solutions',
+            'Essaouira Handicrafts'
+        ];
+        
+        $cities = ['Casablanca', 'Rabat', 'Marrakech', 'Tanger', 'Fes', 'Agadir', 'Tetouan', 'Oujda', 'Kenitra', 'Mohammedia', 'Essaouira'];
+        $legalForms = ['SARL', 'SA', 'SNC', 'SCS', 'SCA'];
+        $activities = [
+            'Commerce de détail', 'Services informatiques', 'Construction', 'Transport', 
+            'Agroalimentaire', 'Textile', 'Tourisme', 'Santé', 'Éducation', 
+            'Immobilier', 'Énergie', 'Télécommunications'
+        ];
 
-        // Example 3
-        Entreprise::create([
-            'id' => 3,
-            'nom' => 'FinTech International',
-            'siege_social' => '789 Financial Blvd, London, UK',
-            'form_juridique' => 'Public Limited Company (PLC)',
-            'activite_principale' => 'Technologies financières et paiements',
-            'numero_societe' => '2345678901',
-        ]);
-
-        // Example 4
-        Entreprise::create([
-            'id' => 4,
-            'nom' => 'BuildIt Construction',
-            'siege_social' => '987 Builders Street, Dubai, UAE',
-            'form_juridique' => 'Limited Liability Company (LLC)',
-            'activite_principale' => 'Construction et génie civil',
-            'numero_societe' => '3456789012',
-        ]);
-
-        // Example 5
-        Entreprise::create([
-            'id' => 5,
-            'nom' => 'HealthCare Plus',
-            'siege_social' => '12 Health Avenue, Berlin, Germany',
-            'form_juridique' => 'Aktiengesellschaft (AG)',
-            'activite_principale' => 'Services de santé et bien-être',
-            'numero_societe' => '4567890123',
-        ]);
-        Entreprise::create([
-            'id' => 6,
-            'nom' => 'HealthCare Plus',
-            'siege_social' => '12 Health Avenue, Berlin, Germany',
-            'form_juridique' => 'Aktiengesellschaft (AG)',
-            'activite_principale' => 'Services de santé et bien-être',
-            'numero_societe' => '4567890123',
-        ]);
+        for ($i = 5; $i <= 20; $i++) {
+            $city = $cities[array_rand($cities)];
+            $name = $companyNames[$i - 5];
+            
+            Entreprise::firstOrCreate(
+                ['id' => $i],
+                [
+                    'nom' => $name,
+                    'siege_social' => $city . ', Maroc',
+                    'form_juridique' => $legalForms[array_rand($legalForms)],
+                    'activite_principale' => $activities[array_rand($activities)],
+                    'numero_societe' => 'RC' . rand(10000, 99999),
+                ]
+            );
+        }
     }
 }

@@ -19,7 +19,7 @@
                             <option value="">Sélectionnez une entreprise</option>
                             @foreach($entreprises as $entreprise)
                                 <option value="{{ $entreprise->id }}" {{ $cnss->entreprise_id == $entreprise->id ? 'selected' : '' }}>
-                                    {{ $entreprise->name }}
+                                    {{ $entreprise->nom }}
                                 </option>
                             @endforeach
                         </select>
@@ -63,9 +63,8 @@
                     <div class="form-group{{ $errors->has('etat') ? ' has-danger' : '' }}">
                         <label>{{ __('État') }}</label>
                         <select name="etat" class="form-control{{ $errors->has('etat') ? ' is-invalid' : '' }}" required>
-                            <option value="en_attente" {{ $cnss->etat === 'en_attente' ? 'selected' : '' }}>En attente</option>
-                            <option value="valide" {{ $cnss->etat === 'valide' ? 'selected' : '' }}>Validé</option>
-                            <option value="refuse" {{ $cnss->etat === 'refuse' ? 'selected' : '' }}>Refusé</option>
+                            <option value="valide" {{ $cnss->etat === 'valide' ? 'selected' : '' }}>Déclaré</option>
+                            <option value="non_valide" {{ $cnss->etat === 'non_valide' ? 'selected' : '' }}>Non déclaré</option>
                         </select>
                         @include('alerts.feedback', ['field' => 'etat'])
                     </div>

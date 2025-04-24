@@ -123,7 +123,7 @@ class TvaDeclarationController extends Controller
      */
     public function getAllDeclarations()
     {
-        $tvaDeclarations = TvaDeclaration::with('entreprise')->get();
+        $tvaDeclarations = TvaDeclaration::with('entreprise')->paginate(10);
         return view('tva-declarations.index', compact('tvaDeclarations'));
     }
 
@@ -137,7 +137,7 @@ class TvaDeclarationController extends Controller
         $declarations = TvaDeclaration::with('entreprise')
             ->where('type', 'mensuelle')
             ->orderBy('periode', 'desc')
-            ->get();
+            ->paginate(10);
         return view('tva-declarations.mensuel.index', compact('declarations'));
     }
 
@@ -151,7 +151,7 @@ class TvaDeclarationController extends Controller
         $declarations = TvaDeclaration::with('entreprise')
             ->where('type', 'trimestrielle')
             ->orderBy('periode', 'desc')
-            ->get();
+            ->paginate(10);
         return view('tva-declarations.trimestriel.index', compact('declarations'));
     }
 
@@ -165,7 +165,7 @@ class TvaDeclarationController extends Controller
         $declarations = TvaDeclaration::with('entreprise')
             ->where('type', 'annuelle')
             ->orderBy('periode', 'desc')
-            ->get();
+            ->paginate(10);
         return view('tva-declarations.annuel.index', compact('declarations'));
     }
 }

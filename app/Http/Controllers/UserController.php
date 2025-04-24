@@ -87,7 +87,7 @@ class UserController extends Controller
     /**get all users*/
     public function getAllUsers()
     {
-        $users = User::all();
+        $users = User::paginate(10);
         return view('pages.tables', compact('users'));
     
     }

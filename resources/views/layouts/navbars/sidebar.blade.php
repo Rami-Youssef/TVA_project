@@ -46,6 +46,18 @@
                     <p>{{ __('CNSS') }}</p>
                 </a>
             </li>
+            <li @if ($pageSlug === 'etats') class="active" @endif>
+                <a href="{{ route('etats.index') }}">
+                    <i class="tim-icons icon-paper"></i>
+                    <p>{{ __('Liste des États') }}</p>
+                </a>
+            </li>
+            <li @if ($pageSlug === 'suivi') class="active" @endif>
+                <a href="{{ route('suivi.index') }}">
+                    <i class="tim-icons icon-chart-pie-36"></i>
+                    <p>{{ __('Liste des Suivis') }}</p>
+                </a>
+            </li>
 
             @if (auth()->user()->role !== 'user')
             <li @if ($pageSlug === 'users') class="active" @endif>
