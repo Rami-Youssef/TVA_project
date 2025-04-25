@@ -13,19 +13,34 @@
         @endif
       </div>
       <div class="card-body">
-        <!-- Search Form -->
+        <!-- Search and Filter Form -->
         <form action="{{ route('entreprise.getAllEntreprises') }}" method="GET" class="mb-4">
-          <div class="input-group d-flex justify-content-center align-items-center">
-            <input type="text" name="search" class="form-control" placeholder="Rechercher par nom..." value="{{ $search ?? '' }}">
-            <div class="input-group-append">
-              <button class="btn btn-primary" type="submit">
-                <i class="tim-icons icon-zoom-split"></i>
-              </button>
-              @if(isset($search) && $search)
-                <a href="{{ route('entreprise.getAllEntreprises') }}" class="btn btn-danger">
-                  <i class="tim-icons icon-simple-remove"></i>
-                </a>
-              @endif
+          <div class="row">
+            <div class="col-md-4">
+              <div class="input-group">
+                <input type="text" name="search" class="form-control" placeholder="Rechercher par nom..." value="{{ $search ?? '' }}">
+                <div class="input-group-append">
+                  <button class="btn btn-primary" type="submit">
+                    <i class="tim-icons icon-zoom-split"></i>
+                  </button>
+                  @if(isset($search) && $search)
+                    <a href="{{ route('entreprise.getAllEntreprises') }}" class="btn btn-danger">
+                      <i class="tim-icons icon-simple-remove"></i>
+                    </a>
+                  @endif
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <select name="etat_filter" class="form-control">
+                <option value="">Filtrer par état</option>
+                <option value="valide" {{ request('etat_filter') == 'valide' ? 'selected' : '' }}>Validé</option>
+                <option value="non_valide" {{ request('etat_filter') == 'non_valide' ? 'selected' : '' }}>Non Validé</option>
+              </select>
+            </div>
+             
+            <div class="col-md-2">
+              <button type="submit" class="btn btn-info w-100">Appliquer</button>
             </div>
           </div>
         </form>

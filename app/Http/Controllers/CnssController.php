@@ -12,22 +12,73 @@ class CnssController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
+        $filter = $request->input('filter', 'all'); // 'all', 'declared', 'undeclared'
         
-        $query = Cnss::with('entreprise');
+        // Get current month and year
+        $currentMonth = date('n'); // Returns the month as a number (4 for April)
+        $currentYear = date('Y');  // Returns the year (2025)
         
+        // Get all companies
+        $allEntreprises = Entreprise::query();
+        
+        // Apply search filter to companies if needed
         if ($search) {
-            $query->whereHas('entreprise', function($q) use ($search) {
-                $q->where('nom', 'like', "%{$search}%");
-            });
+            $allEntreprises->where('nom', 'like', "%{$search}%");
         }
         
-        $declarations = $query->paginate(10);
+        // Get the filtered companies
+        $entreprises = $allEntreprises->get();
         
-        if ($search) {
-            $declarations->appends(['search' => $search]);
+        // Prepare the result collection
+        $declarations = collect();
+        
+        foreach ($entreprises as $entreprise) {
+            // Check if the company has a CNSS declaration for the current month
+            $declaration = Cnss::where('entreprise_id', $entreprise->id)
+                ->where('Mois', $currentMonth)
+                ->where('annee', $currentYear)
+                ->first();
+            
+            if ($declaration) {
+                // Company has declared - include it based on filter
+                if ($filter === 'all' || $filter === 'declared') {
+                    $declarations->push($declaration);
+                }
+            } else {
+                // Company hasn't declared - create a placeholder and include based on filter
+                if ($filter === 'all' || $filter === 'undeclared') {
+                    // Create a non-persisted model instance for display
+                    $placeholder = new Cnss([
+                        'entreprise_id' => $entreprise->id,
+                        'Mois' => $currentMonth,
+                        'annee' => $currentYear,
+                        'Nbr_Salries' => null,
+                        'etat' => 'non_valide'
+                    ]);
+                    $placeholder->exists = false; // Mark as non-persisted
+                    $placeholder->entreprise = $entreprise; // Set relationship manually
+                    $declarations->push($placeholder);
+                }
+            }
         }
         
-        return view('cnss.index', compact('declarations', 'search'));
+        // Manually paginate the collection
+        $page = $request->input('page', 1);
+        $perPage = 10;
+        $totalItems = $declarations->count();
+        
+        $paginator = new \Illuminate\Pagination\LengthAwarePaginator(
+            $declarations->forPage($page, $perPage),
+            $totalItems,
+            $perPage,
+            $page,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
+        
+        // Pass the current month name to the view
+        $monthName = date('F Y'); // Returns the full month name (April 2025)
+        
+        return view('cnss.index', compact('paginator', 'search', 'monthName', 'filter'));
     }
 
     public function create(Request $request)

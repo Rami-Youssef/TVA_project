@@ -23,9 +23,14 @@ class Entreprise extends \Illuminate\Database\Eloquent\Model
     ];
 
     public function tvaDeclarations()
-{
-    return $this->hasMany(TvaDeclaration::class);
-}
+    {
+        return $this->hasMany(TvaDeclaration::class);
+    }
+
+    public function cnssDeclarations()
+    {
+        return $this->hasMany(Cnss::class);
+    }
 
     // You can add other methods or relationships here if needed
 }

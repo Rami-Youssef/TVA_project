@@ -96,19 +96,46 @@ class EntrepriseController extends Controller
     public function getAllEntreprises(Request $request)
     {
         $search = $request->input('search');
+        $etatFilter = $request->input('etat_filter');
+        $sortBy = $request->input('sort_by');
         
         $query = Entreprise::query();
         
+        // Apply search filter
         if ($search) {
             $query->where('nom', 'like', "%{$search}%");
         }
         
-        $entreprises = $query->paginate(10);
-        
-        if ($search) {
-            $entreprises->appends(['search' => $search]);
+        // Apply etat filter
+        if ($etatFilter) {
+            $query->whereHas('cnssDeclarations', function($q) use ($etatFilter) {
+                $q->where('etat', $etatFilter);
+            });
         }
         
-        return view('entreprises.index', compact('entreprises', 'search'));
+        // Apply sorting
+        if ($sortBy) {
+            switch ($sortBy) {
+                case 'nom_asc':
+                    $query->orderBy('nom', 'asc');
+                    break;
+                case 'nom_desc':
+                    $query->orderBy('nom', 'desc');
+                    break;
+                case 'date_asc':
+                    $query->orderBy('created_at', 'asc');
+                    break;
+                case 'date_desc':
+                    $query->orderBy('created_at', 'desc');
+                    break;
+            }
+        }
+        
+        $entreprises = $query->paginate(10);
+        
+        // Preserve all query parameters in pagination links
+        $entreprises->appends($request->all());
+        
+        return view('entreprises.index', compact('entreprises', 'search', 'etatFilter', 'sortBy'));
     }
 }

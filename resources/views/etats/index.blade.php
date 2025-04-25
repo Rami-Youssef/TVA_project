@@ -13,6 +13,47 @@
                 </div>
                 <div class="card-body">
                     @include('alerts.success')
+                    
+                    <!-- Search and Filter Form -->
+                    <form action="{{ route('etats.index') }}" method="GET" class="mb-4">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" name="search" class="form-control" placeholder="Rechercher par nom d'entreprise..." value="{{ $search ?? '' }}">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="submit">
+                                            <i class="tim-icons icon-zoom-split"></i>
+                                        </button>
+                                        @if(isset($search) && $search)
+                                            <a href="{{ route('etats.index') }}" class="btn btn-danger">
+                                                <i class="tim-icons icon-simple-remove"></i>
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <select name="etat_filter" class="form-control">
+                                    <option value="">Filtrer par état</option>
+                                    <option value="valide" {{ request('etat_filter') == 'valide' ? 'selected' : '' }}>Validé</option>
+                                    <option value="non_valide" {{ request('etat_filter') == 'non_valide' ? 'selected' : '' }}>Non Validé</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select name="sort_by" class="form-control">
+                                    <option value="">Trier par</option>
+                                    <option value="nom_asc" {{ request('sort_by') == 'nom_asc' ? 'selected' : '' }}>Entreprise (A-Z)</option>
+                                    <option value="nom_desc" {{ request('sort_by') == 'nom_desc' ? 'selected' : '' }}>Entreprise (Z-A)</option>
+                                    <option value="date_asc" {{ request('sort_by') == 'date_asc' ? 'selected' : '' }}>Date (Ancienne)</option>
+                                    <option value="date_desc" {{ request('sort_by') == 'date_desc' ? 'selected' : '' }}>Date (Récente)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-info w-100">Appliquer</button>
+                            </div>
+                        </div>
+                    </form>
+                    
                     <div class="table-responsive">
                         <table class="table tablesorter" id="">
                             <thead class="text-primary">
