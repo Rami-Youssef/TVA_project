@@ -11,7 +11,7 @@
                         </div>
                         <div class="col-md-6">
                             <form action="{{ route('suivi.index') }}" method="GET">
-                                <div class="input-group">
+                                <div class="input-group d-flex justify-content-center align-items-center">
                                     <input type="text" name="search" class="form-control" placeholder="Rechercher une entreprise..." value="{{ $search ?? '' }}">
                                     <div class="input-group-append">
                                         <button class="btn btn-primary" type="submit">

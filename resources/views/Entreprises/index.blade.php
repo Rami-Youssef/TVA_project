@@ -13,6 +13,23 @@
         @endif
       </div>
       <div class="card-body">
+        <!-- Search Form -->
+        <form action="{{ route('entreprise.getAllEntreprises') }}" method="GET" class="mb-4">
+          <div class="input-group d-flex justify-content-center align-items-center">
+            <input type="text" name="search" class="form-control" placeholder="Rechercher par nom..." value="{{ $search ?? '' }}">
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="submit">
+                <i class="tim-icons icon-zoom-split"></i>
+              </button>
+              @if(isset($search) && $search)
+                <a href="{{ route('entreprise.getAllEntreprises') }}" class="btn btn-danger">
+                  <i class="tim-icons icon-simple-remove"></i>
+                </a>
+              @endif
+            </div>
+          </div>
+        </form>
+        
         <div class="table-responsive">
           <table class="table tablesorter">
             <thead class="text-primary">

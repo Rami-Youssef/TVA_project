@@ -93,9 +93,22 @@ class EntrepriseController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function getAllEntreprises()
+    public function getAllEntreprises(Request $request)
     {
-        $entreprises = Entreprise::paginate(10);
-        return view('entreprises.index', compact('entreprises'));
+        $search = $request->input('search');
+        
+        $query = Entreprise::query();
+        
+        if ($search) {
+            $query->where('nom', 'like', "%{$search}%");
+        }
+        
+        $entreprises = $query->paginate(10);
+        
+        if ($search) {
+            $entreprises->appends(['search' => $search]);
+        }
+        
+        return view('entreprises.index', compact('entreprises', 'search'));
     }
 }

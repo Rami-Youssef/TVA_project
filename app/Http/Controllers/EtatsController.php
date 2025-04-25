@@ -8,10 +8,24 @@ use Illuminate\Http\Request;
 
 class EtatsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // This controller will later filter CNSS declarations specifically for the "List etats" view
-        $declarations = Cnss::with('entreprise')->paginate(10);
-        return view('etats.index', compact('declarations'));
+        $search = $request->input('search');
+        
+        $query = Cnss::with('entreprise');
+        
+        if ($search) {
+            $query->whereHas('entreprise', function($q) use ($search) {
+                $q->where('nom', 'like', "%{$search}%");
+            });
+        }
+        
+        $declarations = $query->paginate(10);
+        
+        if ($search) {
+            $declarations->appends(['search' => $search]);
+        }
+        
+        return view('etats.index', compact('declarations', 'search'));
     }
 }

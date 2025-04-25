@@ -85,10 +85,22 @@ class UserController extends Controller
     }
 
     /**get all users*/
-    public function getAllUsers()
+    public function getAllUsers(Request $request)
     {
-        $users = User::paginate(10);
-        return view('pages.tables', compact('users'));
-    
+        $search = $request->input('search');
+        
+        $query = User::query();
+        
+        if ($search) {
+            $query->where('name', 'like', "%{$search}%");
+        }
+        
+        $users = $query->paginate(10);
+        
+        if ($search) {
+            $users->appends(['search' => $search]);
+        }
+        
+        return view('pages.tables', compact('users', 'search'));
     }
 }

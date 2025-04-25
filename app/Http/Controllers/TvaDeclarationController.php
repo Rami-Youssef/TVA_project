@@ -121,10 +121,25 @@ class TvaDeclarationController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function getAllDeclarations()
+    public function getAllDeclarations(Request $request)
     {
-        $tvaDeclarations = TvaDeclaration::with('entreprise')->paginate(10);
-        return view('tva-declarations.index', compact('tvaDeclarations'));
+        $search = $request->input('search');
+        
+        $query = TvaDeclaration::with('entreprise');
+        
+        if ($search) {
+            $query->whereHas('entreprise', function($q) use ($search) {
+                $q->where('nom', 'like', "%{$search}%");
+            });
+        }
+        
+        $tvaDeclarations = $query->paginate(10);
+        
+        if ($search) {
+            $tvaDeclarations->appends(['search' => $search]);
+        }
+        
+        return view('tva-declarations.index', compact('tvaDeclarations', 'search'));
     }
 
     /**
@@ -132,13 +147,25 @@ class TvaDeclarationController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function getMensuelle()
+    public function getMensuelle(Request $request)
     {
-        $declarations = TvaDeclaration::with('entreprise')
-            ->where('type', 'mensuelle')
-            ->orderBy('periode', 'desc')
-            ->paginate(10);
-        return view('tva-declarations.mensuel.index', compact('declarations'));
+        $search = $request->input('search');
+        
+        $query = TvaDeclaration::with('entreprise')->where('type', 'mensuelle');
+        
+        if ($search) {
+            $query->whereHas('entreprise', function($q) use ($search) {
+                $q->where('nom', 'like', "%{$search}%");
+            });
+        }
+        
+        $declarations = $query->orderBy('periode', 'desc')->paginate(10);
+        
+        if ($search) {
+            $declarations->appends(['search' => $search]);
+        }
+        
+        return view('tva-declarations.mensuel.index', compact('declarations', 'search'));
     }
 
     /**
@@ -146,13 +173,25 @@ class TvaDeclarationController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function getTrimestrielle()
+    public function getTrimestrielle(Request $request)
     {
-        $declarations = TvaDeclaration::with('entreprise')
-            ->where('type', 'trimestrielle')
-            ->orderBy('periode', 'desc')
-            ->paginate(10);
-        return view('tva-declarations.trimestriel.index', compact('declarations'));
+        $search = $request->input('search');
+        
+        $query = TvaDeclaration::with('entreprise')->where('type', 'trimestrielle');
+        
+        if ($search) {
+            $query->whereHas('entreprise', function($q) use ($search) {
+                $q->where('nom', 'like', "%{$search}%");
+            });
+        }
+        
+        $declarations = $query->orderBy('periode', 'desc')->paginate(10);
+        
+        if ($search) {
+            $declarations->appends(['search' => $search]);
+        }
+        
+        return view('tva-declarations.trimestriel.index', compact('declarations', 'search'));
     }
 
     /**
@@ -160,12 +199,24 @@ class TvaDeclarationController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function getAnnuelle()
+    public function getAnnuelle(Request $request)
     {
-        $declarations = TvaDeclaration::with('entreprise')
-            ->where('type', 'annuelle')
-            ->orderBy('periode', 'desc')
-            ->paginate(10);
-        return view('tva-declarations.annuel.index', compact('declarations'));
+        $search = $request->input('search');
+        
+        $query = TvaDeclaration::with('entreprise')->where('type', 'annuelle');
+        
+        if ($search) {
+            $query->whereHas('entreprise', function($q) use ($search) {
+                $q->where('nom', 'like', "%{$search}%");
+            });
+        }
+        
+        $declarations = $query->orderBy('periode', 'desc')->paginate(10);
+        
+        if ($search) {
+            $declarations->appends(['search' => $search]);
+        }
+        
+        return view('tva-declarations.annuel.index', compact('declarations', 'search'));
     }
 }
