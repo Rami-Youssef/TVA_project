@@ -23,18 +23,11 @@
                     
                     <!-- Search Form -->
                     <form action="{{ route('cnss.index') }}" method="GET" class="mb-4">
-                        <div class="input-group d-flex justify-content-center align-items-center">
-                            <input type="text" name="search" class="form-control" placeholder="Rechercher par société, année ou état..." value="{{ $search ?? '' }}">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="submit">
-                                    <i class="tim-icons icon-zoom-split"></i>
-                                </button>
-                                @if(isset($search) && $search)
-                                    <a href="{{ route('cnss.index') }}" class="btn btn-danger">
-                                        <i class="tim-icons icon-simple-remove"></i>
-                                    </a>
-                                @endif
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i class="tim-icons icon-zoom-split"></i></div>
                             </div>
+                            <input type="text" name="search" class="form-control" placeholder="Rechercher par société..." value="{{ $search ?? '' }}">
                         </div>
                     </form>
                     
