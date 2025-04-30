@@ -31,9 +31,6 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-2">
-              <button type="submit" class="btn btn-info w-100">Appliquer</button>
-            </div>
           </div>
         </form>
         
