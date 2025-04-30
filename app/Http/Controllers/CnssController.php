@@ -12,11 +12,11 @@ class CnssController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $filter = $request->input('filter', 'all'); // 'all', 'declared', 'undeclared'
+        $filter = $request->input('filter', 'all'); 
         
-        // Get current month and year
-        $currentMonth = date('n'); // Returns the month as a number (4 for April)
-        $currentYear = date('Y');  // Returns the year (2025)
+        
+        $currentMonth = date('n'); 
+        $currentYear = date('Y');  
         
         // Get all companies
         $allEntreprises = Entreprise::query();
