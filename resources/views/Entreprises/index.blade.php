@@ -31,14 +31,6 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-3">
-              <select name="etat_filter" class="form-control">
-                <option value="">Filtrer par état</option>
-                <option value="valide" {{ request('etat_filter') == 'valide' ? 'selected' : '' }}>Validé</option>
-                <option value="non_valide" {{ request('etat_filter') == 'non_valide' ? 'selected' : '' }}>Non Validé</option>
-              </select>
-            </div>
-             
             <div class="col-md-2">
               <button type="submit" class="btn btn-info w-100">Appliquer</button>
             </div>
