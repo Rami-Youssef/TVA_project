@@ -77,7 +77,7 @@
                       <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('entreprise.edit', $entreprise->id) }}'">
                         Edit
                       </button>
-                      <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $entreprise->id }}">
+                      <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal-{{ $entreprise->id }}">
                         Delete
                       </button>
                     @elseif(Auth::user()->role === 'admin')

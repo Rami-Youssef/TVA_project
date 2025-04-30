@@ -54,7 +54,7 @@
                                                         <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('cnss.edit', $declaration->id) }}'">
                                                             Edit
                                                         </button>
-                                                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $declaration->id }}">
+                                                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal-{{ $declaration->id }}">
                                                             Delete
                                                         </button>
                                                     @elseif(Auth::user()->role === 'admin')

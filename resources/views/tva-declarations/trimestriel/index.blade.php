@@ -40,7 +40,7 @@
                                                     <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('tva-declaration.edit', $declaration->id) }}'">
                                                         Edit
                                                     </button>
-                                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $declaration->id }}">
+                                                    <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal-{{ $declaration->id }}">
                                                         Delete
                                                     </button>
                                                 @elseif(Auth::user()->role === 'admin')
@@ -72,8 +72,9 @@
                             <div class="modal-content" style="background-color: rgb(82, 95, 127); color: white;">
                                 <div class="modal-header border-0">
                                     <h5 class="modal-title" style="color: aliceblue; font-size: 1rem; font-weight: bold;">Confirm Deletion</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" 
-                                            style="filter: invert(1) brightness(0) saturate(100%); cursor: pointer; border: none; background: none;">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                                            style="filter: invert(1) brightness(1) saturate(100%); cursor: pointer; border: none; background: none; font-size: 1.5rem; color: white;">
+                                        <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
@@ -81,7 +82,7 @@
                                     <input type="password" name="password" class="form-control" style="background-color: #4f5e80; color: white;" required autofocus>
                                 </div>
                                 <div class="modal-footer border-0">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                                     <button type="submit" class="btn btn-danger">Confirm Delete</button>
                                 </div>
                             </div>

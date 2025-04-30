@@ -57,7 +57,7 @@
                   <div class="d-flex justify-content-center" style="gap: 0.5rem;">
                     @if(Auth::user()->role === 'super_admin')
                       <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('user.edit', $user->id) }}'">Edit</button>
-                      <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $user->id }}">
+                      <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal-{{ $user->id }}">
                         Delete
                       </button>
                     @elseif(Auth::user()->role === 'admin')
@@ -82,7 +82,7 @@
               <div class="modal-content" style="background-color: rgb(82, 95, 127); color: white;">
                 <div class="modal-header border-0">
                   <h5 class="modal-title" style="color: aliceblue; font-size: 1rem; font-weight: bold;">Confirm Deletion</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" 
+                  <button type="button" class="btn-close" data-dismiss="modal" 
                           style="filter: invert(1) brightness(0) saturate(100%); cursor: pointer; border: none; background: none;">
                   </button>
                 </div>
@@ -91,7 +91,7 @@
                   <input type="password" name="password" class="form-control" style="background-color: #4f5e80; color: white;" required autofocus>
                 </div>
                 <div class="modal-footer border-0">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                   <button type="submit" class="btn btn-danger">Confirm Delete</button>
                 </div>
               </div>
