@@ -19,7 +19,7 @@ class CreateEntreprisesTable extends Migration
             $table->string('siege_social');
             $table->string('form_juridique');
             $table->string('activite_principale');
-            $table->string('numero_societe');
+            $table->string('ice');
             $table->timestamps();
         });
     }

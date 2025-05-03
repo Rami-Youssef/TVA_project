@@ -50,7 +50,7 @@ class UsersTableSeeder extends Seeder
         $roles = ['user', 'admin', 'super_admin'];
         $role_weights = [70, 20, 10]; // 70% users, 20% admins, 10% super_admins
         
-        $firstNames = ['Mohammed', 'Fatima', 'Ahmed', 'Aisha', 'Omar', 'Laila', 'Youssef', 'Amina', 
+        $firstNames = ['Mohammed', 'mehdi', 'Ahmed', 'Aisha', 'Omar', 'Laila', 'Youssef', 'Amina', 
                       'Karim', 'Nadia', 'Hassan', 'Samira', 'Ali', 'Leila', 'Ibrahim', 'Sophia', 'Rachid'];
         $lastNames = ['Alami', 'Bennani', 'Chraibi', 'Tazi', 'Fassi', 'El Mansouri', 'Idrissi', 'Berrada', 
                      'Bouzoubaa', 'El Amrani', 'Benjelloun', 'Saidi', 'Bennis', 'Tahiri', 'El Ouazzani', 'Laraki', 'Daoudi'];

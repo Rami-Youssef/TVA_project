@@ -76,6 +76,20 @@
                         {{ $declarations->links() }}
                     </div>
 
+                    <!-- ApexCharts Employee Count Visualization -->
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Évolution du nombre de salariés</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div id="employee-chart" style="height: 350px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Delete Confirmation Modals -->
                     @foreach ($declarations as $declaration)
                         <div class="modal fade" id="confirmDeleteModal-{{ $declaration->id }}" tabindex="-1" aria-hidden="true">
@@ -108,3 +122,202 @@
         </div>
     </div>
 @endsection
+
+@push('js')
+    <!-- ApexCharts JS -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Prepare data for the chart
+            let cnssData = {!! json_encode(
+        $declarations->map(function($declaration) {
+            return [
+                strtotime($declaration->annee . '-' . str_pad($declaration->Mois, 2, '0', STR_PAD_LEFT) . '-01') * 1000,
+                $declaration->Nbr_Salries ?? 0
+            ];
+        })
+    ) !!};
+            
+            // Sort data by date
+            cnssData.sort((a, b) => a[0] - b[0]);
+            
+            // Create the ApexCharts instance
+            const options = {
+                series: [{
+                    name: 'Nombre de salariés',
+                    data: cnssData
+                }],
+                chart: {
+                    type: 'area',
+                    height: 350,
+                    toolbar: {
+                        show: true,
+                        tools: {
+                            download: true,
+                            selection: true,
+                            zoom: true,
+                            zoomin: true,
+                            zoomout: true,
+                            pan: true,
+                            reset: true,
+                        },
+                        autoSelected: 'zoom'
+                    },
+                    zoom: {
+                        enabled: true
+                    },
+                    foreColor: '#fff' // Set default text color to white for all chart elements
+                },
+                dataLabels: {
+                    enabled: true,
+                    offsetY: -10,
+                    style: {
+                        fontSize: '12px',
+                        colors: ['#fff']
+                    },
+                    background: {
+                        enabled: true,
+                        foreColor: '#1e1e2f',
+                        padding: 4,
+                        borderRadius: 2,
+                        borderWidth: 1,
+                        borderColor: '#e14eca',
+                        opacity: 0.9,
+                    },
+                    formatter: function(val) {
+                        return val + ' sal';
+                    }
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 3,
+                    colors: ['#e14eca']
+                },
+                colors: ['#e14eca'],
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.7,
+                        opacityTo: 0.3,
+                        stops: [0, 90, 100],
+                        colorStops: [
+                            {
+                                offset: 0,
+                                color: '#e14eca',
+                                opacity: 0.7
+                            },
+                            {
+                                offset: 100,
+                                color: '#ba54f5',
+                                opacity: 0.3
+                            }
+                        ]
+                    }
+                },
+                xaxis: {
+                    type: 'datetime',
+                    labels: {
+                        style: {
+                            colors: '#ffffff' // White text for x-axis labels
+                        },
+                        formatter: function(val) {
+                            const date = new Date(val);
+                            const months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
+                            return months[date.getMonth()] + ' ' + date.getFullYear();
+                        }
+                    },
+                    axisBorder: {
+                        show: true,
+                        color: '#535353'
+                    },
+                    axisTicks: {
+                        show: true,
+                        color: '#535353'
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Nombre de salariés',
+                        style: {
+                            color: '#ffffff' // White text for y-axis title
+                        }
+                    },
+                    min: 0,
+                    forceNiceScale: true,
+                    labels: {
+                        style: {
+                            colors: ['#ffffff'] // White text for y-axis labels
+                        }
+                    }
+                },
+                tooltip: {
+                    theme: 'dark', // Dark theme for tooltips for better contrast
+                    x: {
+                        format: 'MMM yyyy'
+                    },
+                    y: {
+                        formatter: function(val) {
+                            return val + ' salariés';
+                        }
+                    }
+                },
+                markers: {
+                    size: 5,
+                    colors: ['#e14eca'],
+                    strokeColors: '#fff',
+                    strokeWidth: 2,
+                    hover: {
+                        size: 7
+                    }
+                },
+                grid: {
+                    borderColor: '#535353',
+                    yaxis: {
+                        lines: {
+                            show: true
+                        }
+                    },
+                    padding: {
+                        left: 10,
+                        right: 10
+                    }
+                },
+                legend: {
+                    labels: {
+                        colors: '#ffffff' // White text for legend
+                    }
+                },
+                annotations: {
+                    points: cnssData.map(point => {
+                        return {
+                            x: point[0],
+                            y: point[1],
+                            marker: {
+                                size: 0
+                            },
+                            label: {
+                                borderColor: 'transparent',
+                                offsetY: -15,
+                                style: {
+                                    color: '#fff',
+                                    background: 'transparent'
+                                },
+                                text: point[1] + ' sal.'
+                            }
+                        };
+                    })
+                }
+            };
+
+            const chart = new ApexCharts(document.querySelector("#employee-chart"), options);
+            chart.render();
+        });
+        
+        // Helper function to convert date to timestamp
+        function strtotime(dateString) {
+            return new Date(dateString).getTime() / 1000;
+        }
+    </script>
+@endpush

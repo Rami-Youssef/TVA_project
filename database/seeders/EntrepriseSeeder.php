@@ -21,7 +21,7 @@ class EntrepriseSeeder extends Seeder
                 'siege_social' => 'Casablanca, Maroc',
                 'form_juridique' => 'SARL',
                 'activite_principale' => 'Développement informatique',
-                'numero_societe' => 'RC12345',
+                'ice' => '001234567890123',
             ]
         );
         
@@ -32,7 +32,7 @@ class EntrepriseSeeder extends Seeder
                 'siege_social' => 'Rabat, Maroc',
                 'form_juridique' => 'SA',
                 'activite_principale' => 'Conseil en management',
-                'numero_societe' => 'RC67890',
+                'ice' => '002345678901234',
             ]
         );
         
@@ -43,7 +43,7 @@ class EntrepriseSeeder extends Seeder
                 'siege_social' => 'Marrakech, Maroc',
                 'form_juridique' => 'SARL',
                 'activite_principale' => 'Transport et logistique',
-                'numero_societe' => 'RC24680',
+                'ice' => '003456789012345',
             ]
         );
         
@@ -54,7 +54,7 @@ class EntrepriseSeeder extends Seeder
                 'siege_social' => 'Tanger, Maroc',
                 'form_juridique' => 'SA',
                 'activite_principale' => 'Industrie manufacturière',
-                'numero_societe' => 'RC13579',
+                'ice' => '004567890123456',
             ]
         );
 
@@ -87,7 +87,7 @@ class EntrepriseSeeder extends Seeder
                     'siege_social' => $city . ', Maroc',
                     'form_juridique' => $legalForms[array_rand($legalForms)],
                     'activite_principale' => $activities[array_rand($activities)],
-                    'numero_societe' => 'RC' . rand(10000, 99999),
+                    'ice' => '00' . rand(1000000000000, 9999999999999),
                 ]
             );
         }

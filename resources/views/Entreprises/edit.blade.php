@@ -51,12 +51,12 @@
                             @include('alerts.feedback', ['field' => 'activite_principale'])
                         </div>
 
-                        <div class="form-group{{ $errors->has('numero_societe') ? ' has-danger' : '' }}">
-                            <label>{{ __('Numéro de société') }}</label>
-                            <input type="text" name="numero_societe" class="form-control{{ $errors->has('numero_societe') ? ' is-invalid' : '' }}" 
-                                   placeholder="{{ __('Numéro SIREN/SIRET') }}" value="{{ old('numero_societe', $entreprise->numero_societe) }}" required pattern="[0-9]+"
-                                   data-toggle="tooltip" data-placement="right" title="Numéro SIREN (9 chiffres) ou SIRET (14 chiffres)">
-                            @include('alerts.feedback', ['field' => 'numero_societe'])
+                        <div class="form-group{{ $errors->has('ice') ? ' has-danger' : '' }}">
+                            <label>{{ __('ICE') }}</label>
+                            <input type="text" name="ice" class="form-control{{ $errors->has('ice') ? ' is-invalid' : '' }}" 
+                                   placeholder="{{ __('Identifiant Commun de l\'Entreprise') }}" value="{{ old('ice', $entreprise->ice) }}" required
+                                   data-toggle="tooltip" data-placement="right" title="Identifiant Commun de l'Entreprise (ICE)">
+                            @include('alerts.feedback', ['field' => 'ice'])
                         </div>
                     </div>
                     <div class="card-footer">
@@ -64,6 +64,7 @@
                     </div>
                 </form>
             </div>
+            
         </div>
     </div>
 @endsection
@@ -76,16 +77,11 @@
 
         // Form validation
         $("#entrepriseForm").on('submit', function(e) {
-            const numeroSociete = $('input[name="numero_societe"]').val();
-            if (!/^[0-9]+$/.test(numeroSociete)) {
-                e.preventDefault();
-                alert("Le numéro de société doit contenir uniquement des chiffres");
-                return false;
-            }
+            const iceValue = $('input[name="ice"]').val();
             
-            if (numeroSociete.length !== 9 && numeroSociete.length !== 14) {
+            if (iceValue.trim() === '') {
                 e.preventDefault();
-                alert("Le numéro de société doit contenir soit 9 chiffres (SIREN) soit 14 chiffres (SIRET)");
+                alert("L'ICE est obligatoire");
                 return false;
             }
             

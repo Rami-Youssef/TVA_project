@@ -32,7 +32,7 @@ class EntrepriseController extends Controller
             'siege_social' => $request->input('siege_social'),
             'form_juridique' => $request->input('form_juridique'),
             'activite_principale' => $request->input('activite_principale'),
-            'numero_societe' => $request->input('numero_societe'),
+            'ice' => $request->input('ice'),
         ]);
 
         return redirect()->route('entreprise.getAllEntreprises')->withStatus(__('Entreprise successfully created.'));
@@ -64,7 +64,7 @@ class EntrepriseController extends Controller
             'siege_social' => $request->input('siege_social'),
             'form_juridique' => $request->input('form_juridique'),
             'activite_principale' => $request->input('activite_principale'),
-            'numero_societe' => $request->input('numero_societe'),
+            'ice' => $request->input('ice'),
         ]);
 
         return redirect()->route('entreprise.getAllEntreprises')->withStatus(__('Entreprise successfully updated.'));

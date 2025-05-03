@@ -42,7 +42,7 @@
                 <th>{{ __('Siège Social') }}</th>
                 <th>{{ __('Forme Juridique') }}</th>
                 <th>{{ __('Activité') }}</th>
-                <th>{{ __('N° Société') }}</th>
+                <th>{{ __('ICE') }}</th>
                 @if(Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin')
                   <th class="text-center">{{ __('Actions') }}</th>
                 @endif
@@ -55,7 +55,7 @@
                 <td>{{ $entreprise->siege_social }}</td>
                 <td>{{ $entreprise->form_juridique }}</td>
                 <td>{{ $entreprise->activite_principale }}</td>
-                <td>{{ $entreprise->numero_societe }}</td>
+                <td>{{ $entreprise->ice }}</td>
                 @if(Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin')
                 <td class="text-center">
                   <div class="d-flex justify-content-center" style="gap: 0.5rem;">
