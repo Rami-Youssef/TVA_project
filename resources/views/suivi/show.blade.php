@@ -129,18 +129,8 @@
     
     <script>
         $(document).ready(function() {
-            // Prepare data for the chart
-            let cnssData = {!! json_encode(
-        $declarations->map(function($declaration) {
-            return [
-                strtotime($declaration->annee . '-' . str_pad($declaration->Mois, 2, '0', STR_PAD_LEFT) . '-01') * 1000,
-                $declaration->Nbr_Salries ?? 0
-            ];
-        })
-    ) !!};
-            
-            // Sort data by date
-            cnssData.sort((a, b) => a[0] - b[0]);
+            // Use the pre-prepared data from the controller that includes all months
+            let cnssData = {!! json_encode($chartData) !!};
             
             // Create the ApexCharts instance
             const options = {
@@ -153,6 +143,7 @@
                     height: 350,
                     toolbar: {
                         show: true,
+                        offsetY: -35, // Move toolbar upward above the chart
                         tools: {
                             download: true,
                             selection: true,
@@ -288,36 +279,11 @@
                     labels: {
                         colors: '#ffffff' // White text for legend
                     }
-                },
-                annotations: {
-                    points: cnssData.map(point => {
-                        return {
-                            x: point[0],
-                            y: point[1],
-                            marker: {
-                                size: 0
-                            },
-                            label: {
-                                borderColor: 'transparent',
-                                offsetY: -15,
-                                style: {
-                                    color: '#fff',
-                                    background: 'transparent'
-                                },
-                                text: point[1] + ' sal.'
-                            }
-                        };
-                    })
                 }
             };
 
             const chart = new ApexCharts(document.querySelector("#employee-chart"), options);
             chart.render();
         });
-        
-        // Helper function to convert date to timestamp
-        function strtotime(dateString) {
-            return new Date(dateString).getTime() / 1000;
-        }
     </script>
 @endpush
