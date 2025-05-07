@@ -40,7 +40,7 @@
                                             <h5 class="card-title">{{ $entreprise->nom }}</h5>
                                             <p class="card-text">
                                                 <strong>Activité:</strong> {{ $entreprise->activite_principale ?? 'N/A' }}<br>
-                                                <strong>Numéro:</strong> {{ $entreprise->numero_societe ?? 'N/A' }}<br>
+                                                <strong>ICE:</strong> {{ $entreprise->ice ?? 'N/A' }}<br>
                                                 <small class="text-muted">{{ $entreprise->siege_social ?? '' }}</small>
                                             </p>
                                             <div class="mt-auto">
