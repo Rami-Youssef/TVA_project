@@ -25,9 +25,7 @@ class EntreprisesExport implements FromQuery, WithHeadings, WithMapping
         if ($this->search) {
             $query->where(function ($q) {
                 $q->where('nom', 'like', "%{$this->search}%")
-                  ->orWhere('ice', 'like', "%{$this->search}%")
-                  ->orWhere('email', 'like', "%{$this->search}%")
-                  ->orWhere('telephone', 'like', "%{$this->search}%");
+                  ->orWhere('ice', 'like', "%{$this->search}%");
             });
         }
 
@@ -48,8 +46,6 @@ class EntreprisesExport implements FromQuery, WithHeadings, WithMapping
             'Forme Juridique',
             'Activité Principale',
             'ICE',
-            'Email',
-            'Téléphone',
         ];
     }
 
@@ -61,8 +57,6 @@ class EntreprisesExport implements FromQuery, WithHeadings, WithMapping
             $entreprise->form_juridique,
             $entreprise->activite_principale,
             $entreprise->ice,
-            $entreprise->email,
-            $entreprise->telephone,
         ];
     }
 }

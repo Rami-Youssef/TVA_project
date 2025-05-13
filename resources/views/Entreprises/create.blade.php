@@ -55,22 +55,6 @@
                                    data-toggle="tooltip" data-placement="right" title="Identifiant Commun de l'Entreprise (ICE)">
                             @include('alerts.feedback', ['field' => 'ice'])
                         </div>
-
-                        <div class="form-group{{ $errors->has('email') ? ' has-danger' : '' }}">
-                            <label>{{ __('Email') }}</label>
-                            <input type="email" name="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" 
-                                   placeholder="{{ __('Email') }}" value="{{ old('email') }}"
-                                   data-toggle="tooltip" data-placement="right" title="Adresse email de contact">
-                            @include('alerts.feedback', ['field' => 'email'])
-                        </div>
-
-                        <div class="form-group{{ $errors->has('telephone') ? ' has-danger' : '' }}">
-                            <label>{{ __('Téléphone') }}</label>
-                            <input type="text" name="telephone" class="form-control{{ $errors->has('telephone') ? ' is-invalid' : '' }}" 
-                                   placeholder="{{ __('Numéro de téléphone') }}" value="{{ old('telephone') }}"
-                                   data-toggle="tooltip" data-placement="right" title="Numéro de téléphone de contact">
-                            @include('alerts.feedback', ['field' => 'telephone'])
-                        </div>
                     </div>
                     <div class="card-footer">
                         <button type="submit" class="btn btn-fill btn-primary">{{ __('Enregistrer') }}</button>

@@ -11,15 +11,12 @@ class Entreprise extends \Illuminate\Database\Eloquent\Model
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
-     */
-    protected $fillable = [
+     */    protected $fillable = [
         'nom',
         'siege_social',        // No accent, use snake_case
         'form_juridique',
         'activite_principale', // Use snake_case for multi-word attributes
-        'ice',
-        'email',
-        'telephone'
+        'ice'
     ];
 
     public function tvaDeclarations()

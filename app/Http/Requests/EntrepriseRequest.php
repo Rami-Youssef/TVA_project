@@ -34,15 +34,12 @@ class EntrepriseRequest extends FormRequest
                     'Entreprise Individuelle (EI)',
                     'Auto-Entrepreneur'
                 ])
-            ],            'activite_principale' => ['required', 'string', 'min:3', 'max:255'],
-            'ice' => [
+            ],            'activite_principale' => ['required', 'string', 'min:3', 'max:255'],            'ice' => [
                 'required',
                 'numeric',
                 'regex:/^[0-9]{9}([0-9]{5})?$/', // Either 9 (SIREN) or 14 (SIRET) digits
                 Rule::unique('entreprises')->ignore($this->route('entreprise')),
             ],
-            'email' => ['nullable', 'email', 'max:255'],
-            'telephone' => ['nullable', 'string', 'max:20'],
         ];
     }
 

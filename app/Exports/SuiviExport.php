@@ -40,8 +40,6 @@ class SuiviExport implements FromQuery, WithHeadings, WithMapping
             'ICE',
             'Activité Principale',
             'Siège Social',
-            'Téléphone',
-            'Email',
             // Add more headings if you display more info on the Suivi index before clicking an entreprise
         ];
     }
@@ -54,8 +52,6 @@ class SuiviExport implements FromQuery, WithHeadings, WithMapping
             $entreprise->ice,
             $entreprise->activite_principale,
             $entreprise->siege_social,
-            $entreprise->telephone,
-            $entreprise->email,
             // Map additional fields if needed
         ];
     }
