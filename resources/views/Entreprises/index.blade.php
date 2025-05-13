@@ -47,14 +47,15 @@
         </div>
         
         <div class="table-responsive">
-          <table class="table tablesorter">
-            <thead class="text-primary">
+          <table class="table tablesorter">            <thead class="text-primary">
               <tr>
                 <th>{{ __('Nom') }}</th>
                 <th>{{ __('Siège Social') }}</th>
                 <th>{{ __('Forme Juridique') }}</th>
                 <th>{{ __('Activité') }}</th>
                 <th>{{ __('ICE') }}</th>
+                <th>{{ __('Email') }}</th>
+                <th>{{ __('Téléphone') }}</th>
                 @if(Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin')
                   <th class="text-center">{{ __('Actions') }}</th>
                 @endif
@@ -68,6 +69,8 @@
                 <td>{{ $entreprise->form_juridique }}</td>
                 <td>{{ $entreprise->activite_principale }}</td>
                 <td>{{ $entreprise->ice }}</td>
+                <td>{{ $entreprise->email }}</td>
+                <td>{{ $entreprise->telephone }}</td>
                 @if(Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin')
                 <td class="text-center">
                   <div class="d-flex justify-content-center" style="gap: 0.5rem;">

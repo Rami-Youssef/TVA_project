@@ -7,9 +7,7 @@ use Illuminate\Notifications\Notifiable;
 
 class Entreprise extends \Illuminate\Database\Eloquent\Model
 {
-    use HasFactory, Notifiable;
-
-    /**
+    use HasFactory, Notifiable;    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -19,7 +17,9 @@ class Entreprise extends \Illuminate\Database\Eloquent\Model
         'siege_social',        // No accent, use snake_case
         'form_juridique',
         'activite_principale', // Use snake_case for multi-word attributes
-        'ice'
+        'ice',
+        'email',
+        'telephone'
     ];
 
     public function tvaDeclarations()

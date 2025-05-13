@@ -48,6 +48,8 @@ class EntreprisesExport implements FromQuery, WithHeadings, WithMapping
             'Forme Juridique',
             'Activité Principale',
             'ICE',
+            'Email',
+            'Téléphone',
         ];
     }
 
@@ -59,6 +61,8 @@ class EntreprisesExport implements FromQuery, WithHeadings, WithMapping
             $entreprise->form_juridique,
             $entreprise->activite_principale,
             $entreprise->ice,
+            $entreprise->email,
+            $entreprise->telephone,
         ];
     }
 }

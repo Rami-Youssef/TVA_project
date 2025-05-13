@@ -36,6 +36,8 @@ class EntrepriseController extends Controller
             'form_juridique' => $request->input('form_juridique'),
             'activite_principale' => $request->input('activite_principale'),
             'ice' => $request->input('ice'),
+            'email' => $request->input('email'),
+            'telephone' => $request->input('telephone'),
         ]);
 
         return redirect()->route('entreprise.getAllEntreprises')->withStatus(__('Entreprise successfully created.'));
@@ -68,6 +70,8 @@ class EntrepriseController extends Controller
             'form_juridique' => $request->input('form_juridique'),
             'activite_principale' => $request->input('activite_principale'),
             'ice' => $request->input('ice'),
+            'email' => $request->input('email'),
+            'telephone' => $request->input('telephone'),
         ]);
 
         return redirect()->route('entreprise.getAllEntreprises')->withStatus(__('Entreprise successfully updated.'));
