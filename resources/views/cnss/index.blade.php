@@ -24,7 +24,7 @@
                     <!-- Search and Filter Form -->
                     <form action="{{ route('cnss.index') }}" method="GET" class="mb-4">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text"><i class="tim-icons icon-zoom-split"></i></div>
@@ -32,7 +32,7 @@
                                     <input type="text" name="search" class="form-control" placeholder="Rechercher par société..." value="{{ $search ?? '' }}">
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <select name="filter" class="form-control">
                                     <option value="all" {{ ($filter ?? '') == 'all' ? 'selected' : '' }}>Toutes les déclarations</option>
                                     <option value="declared" {{ ($filter ?? '') == 'declared' ? 'selected' : '' }}>Déclarées</option>
@@ -41,6 +41,16 @@
                             </div>
                             <div class="col-md-2">
                                 <button type="submit" class="btn btn-primary">Filtrer</button>
+                            </div>
+                            <div class="col-md-2 text-right">
+                                <div class="btn-group">
+                                    <a href="{{ route('cnss.export.pdf', ['search' => $search ?? '', 'filter' => $filter ?? 'all']) }}" class="btn btn-sm btn-info">
+                                        <i class="tim-icons icon-paper"></i> PDF
+                                    </a>
+                                    <a href="{{ route('cnss.export.excel', ['search' => $search ?? '', 'filter' => $filter ?? 'all']) }}" class="btn btn-sm btn-success">
+                                        <i class="tim-icons icon-chart-bar-32"></i> Excel
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </form>

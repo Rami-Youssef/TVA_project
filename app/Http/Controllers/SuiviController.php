@@ -6,19 +6,35 @@ use App\Models\Cnss;
 use App\Models\Entreprise;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Exports\SuiviExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SuiviController extends Controller
 {
+    private function getFilteredEntreprisesQuery(Request $request)
+    {
+        $search = $request->input('search');
+        $query = Entreprise::query();
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nom', 'like', "%{$search}%")
+                  ->orWhere('ice', 'like', "%{$search}%")
+                  ->orWhere('activite_principale', 'like', "%{$search}%");
+            });
+        }
+        return $query;
+    }
+
     public function index(Request $request)
     {
         $search = $request->input('search');
+        $query = $this->getFilteredEntreprisesQuery($request);
+        $entreprises = $query->paginate(10);
         
-        // Filter companies by name if search parameter is provided
         if ($search) {
-            $entreprises = Entreprise::where('nom', 'like', "%{$search}%")->paginate(10);
             $entreprises->appends(['search' => $search]);
-        } else {
-            $entreprises = Entreprise::paginate(10);
         }
         
         return view('suivi.index', compact('entreprises', 'search'));
@@ -26,33 +42,26 @@ class SuiviController extends Controller
     
     public function show($entrepriseId)
     {
-        // Fetch only CNSS declarations for the specific company
         $entreprise = Entreprise::findOrFail($entrepriseId);
         $declarations = Cnss::where('entreprise_id', $entrepriseId)->orderBy('annee', 'asc')
             ->orderBy('Mois', 'asc')->paginate(10);
             
-        // Get all existing declarations for the chart (without pagination)
         $allDeclarations = Cnss::where('entreprise_id', $entrepriseId)
             ->orderBy('annee', 'asc')
             ->orderBy('Mois', 'asc')
             ->get();
         
-        // Prepare data for the chart, ensuring all months are covered
         $chartData = $this->prepareMonthlyChartData($allDeclarations);
         
         return view('suivi.show', compact('declarations', 'entreprise', 'chartData'));
     }
     
-    /**
-     * Prepare monthly chart data with gaps filled with zeroes
-     */
     private function prepareMonthlyChartData($declarations)
     {
         if ($declarations->isEmpty()) {
             return [];
         }
         
-        // Find the first and last dates
         $firstDate = null;
         $lastDate = Carbon::now();
         
@@ -64,26 +73,23 @@ class SuiviController extends Controller
             }
         }
         
-        // If no declarations found, return empty array
         if ($firstDate === null) {
             return [];
         }
         
-        // Create a map of all declarations by year-month
         $declarationsByMonth = [];
         foreach ($declarations as $declaration) {
             $key = $declaration->annee . '-' . str_pad($declaration->Mois, 2, '0', STR_PAD_LEFT);
             $declarationsByMonth[$key] = $declaration->Nbr_Salries ?? 0;
         }
         
-        // Generate continuous series of months from first to current date
         $result = [];
         $currentDate = clone $firstDate;
         
         while ($currentDate->lte($lastDate)) {
             $key = $currentDate->format('Y-m');
-            $timestamp = $currentDate->timestamp * 1000; // Convert to milliseconds for ApexCharts
-            $count = $declarationsByMonth[$key] ?? 0; // Use 0 if no data exists
+            $timestamp = $currentDate->timestamp * 1000;
+            $count = $declarationsByMonth[$key] ?? 0;
             
             $result[] = [$timestamp, $count];
             
@@ -91,5 +97,21 @@ class SuiviController extends Controller
         }
         
         return $result;
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $query = $this->getFilteredEntreprisesQuery($request);
+        $entreprises = $query->get();
+
+        $pdf = Pdf::loadView('suivi.pdf', compact('entreprises'));
+        return $pdf->download('suivi-entreprises-' . date('Y-m-d_H-i-s') . '.pdf');
+    }
+
+    public function exportExcel(Request $request)
+    {
+        $search = $request->input('search');
+
+        return Excel::download(new SuiviExport($search), 'suivi-entreprises-' . date('Y-m-d_H-i-s') . '.xlsx');
     }
 }

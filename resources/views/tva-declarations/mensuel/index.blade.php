@@ -29,6 +29,20 @@
                         </div>
                     </div>
                 </form>
+
+                <!-- Export Buttons -->
+                <div class="row mb-3">
+                    <div class="col-12 text-right">
+                        <div class="btn-group">
+                            <a href="{{ route('tva-declaration.mensuelle.export.pdf', ['search' => $search ?? '']) }}" class="btn btn-sm btn-info">
+                                <i class="tim-icons icon-paper"></i> PDF
+                            </a>
+                            <a href="{{ route('tva-declaration.mensuelle.export.excel', ['search' => $search ?? '']) }}" class="btn btn-sm btn-success">
+                                <i class="tim-icons icon-chart-bar-32"></i> Excel
+                            </a>
+                        </div>
+                    </div>
+                </div>
                 
                 <div class="table-responsive">
                     <table class="table tablesorter">

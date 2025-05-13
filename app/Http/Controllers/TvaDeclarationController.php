@@ -7,6 +7,10 @@ use App\Models\Entreprise;
 use App\Http\Requests\TvaDeclarationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use App\Exports\TvaDeclarationsExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class TvaDeclarationController extends Controller
 {
@@ -33,11 +37,14 @@ class TvaDeclarationController extends Controller
             'entreprise_id' => $request->input('entreprise_id'),
             'type' => $request->input('type'),
             'periode' => $request->input('periode'),
-            'montant' => $request->input('montant'),
+            'montant_ht' => $request->input('montant_ht'),
+            'montant_tva' => $request->input('montant_tva'),
+            'montant_ttc' => $request->input('montant_ttc'),
             'date_declaration' => $request->input('date_declaration'),
+            'date_paiement_prevue' => $request->input('date_paiement_prevue'),
+            'statut_paiement' => $request->input('statut_paiement'),
         ]);
 
-        // Redirect to the appropriate type-specific view
         $route = match($request->input('type')) {
             'mensuelle' => 'tva-declaration.mensuelle',
             'trimestrielle' => 'tva-declaration.trimestrielle',
@@ -74,11 +81,14 @@ class TvaDeclarationController extends Controller
             'entreprise_id' => $request->input('entreprise_id'),
             'type' => $request->input('type'),
             'periode' => $request->input('periode'),
-            'montant' => $request->input('montant'),
+            'montant_ht' => $request->input('montant_ht'),
+            'montant_tva' => $request->input('montant_tva'),
+            'montant_ttc' => $request->input('montant_ttc'),
             'date_declaration' => $request->input('date_declaration'),
+            'date_paiement_prevue' => $request->input('date_paiement_prevue'),
+            'statut_paiement' => $request->input('statut_paiement'),
         ]);
 
-        // Redirect to the appropriate type-specific view
         $route = match($request->input('type')) {
             'mensuelle' => 'tva-declaration.mensuelle',
             'trimestrielle' => 'tva-declaration.trimestrielle',
@@ -98,8 +108,9 @@ class TvaDeclarationController extends Controller
      */
     public function destroy(Request $request, TvaDeclaration $tvaDeclaration)
     {
-        if (!Hash::check($request->password, auth()->user()->password)) {
-            return back()->withErrors(['password' => 'Incorrect password.']);
+        $currentUser = Auth::user();
+        if (!$currentUser || !Hash::check($request->password, $currentUser->password)) {
+            return back()->withErrors(['password' => 'Incorrect password or not authenticated.']);
         }
 
         $type = $tvaDeclaration->type;
@@ -133,7 +144,7 @@ class TvaDeclarationController extends Controller
             });
         }
         
-        $tvaDeclarations = $query->paginate(10);
+        $tvaDeclarations = $query->orderBy('date_declaration', 'desc')->paginate(10);
         
         if ($search) {
             $tvaDeclarations->appends(['search' => $search]);
@@ -218,5 +229,95 @@ class TvaDeclarationController extends Controller
         }
         
         return view('tva-declarations.annuel.index', compact('declarations', 'search'));
+    }
+
+    private function getFilteredDeclarations(Request $request, string $periodeType)
+    {
+        $search = $request->input('search');
+        
+        $query = TvaDeclaration::with('entreprise')->where('type', $periodeType);
+
+        if ($search) {
+            $query->whereHas('entreprise', function ($q) use ($search) {
+                $q->where('nom', 'like', "%{$search}%");
+            });
+        }
+
+        return $query->orderBy('periode', 'desc')->get();
+    }
+
+    /**
+     * Export monthly TVA declarations to PDF.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function exportMensuellePdf(Request $request)
+    {
+        $declarations = $this->getFilteredDeclarations($request, 'mensuelle');
+        $pdf = Pdf::loadView('tva-declarations.pdf.mensuelle', compact('declarations'));
+        return $pdf->download('tva-mensuelle-' . date('Y-m-d_H-i-s') . '.pdf');
+    }
+
+    /**
+     * Export monthly TVA declarations to Excel.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function exportMensuelleExcel(Request $request)
+    {
+        $search = $request->input('search');
+        return Excel::download(new TvaDeclarationsExport('mensuelle', $search), 'tva-mensuelle-' . date('Y-m-d_H-i-s') . '.xlsx');
+    }
+
+    /**
+     * Export quarterly TVA declarations to PDF.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function exportTrimestriellePdf(Request $request)
+    {
+        $declarations = $this->getFilteredDeclarations($request, 'trimestrielle');
+        $pdf = Pdf::loadView('tva-declarations.pdf.trimestrielle', compact('declarations'));
+        return $pdf->download('tva-trimestrielle-' . date('Y-m-d_H-i-s') . '.pdf');
+    }
+
+    /**
+     * Export quarterly TVA declarations to Excel.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function exportTrimestrielleExcel(Request $request)
+    {
+        $search = $request->input('search');
+        return Excel::download(new TvaDeclarationsExport('trimestrielle', $search), 'tva-trimestrielle-' . date('Y-m-d_H-i-s') . '.xlsx');
+    }
+
+    /**
+     * Export annual TVA declarations to PDF.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function exportAnnuellePdf(Request $request)
+    {
+        $declarations = $this->getFilteredDeclarations($request, 'annuelle');
+        $pdf = Pdf::loadView('tva-declarations.pdf.annuelle', compact('declarations'));
+        return $pdf->download('tva-annuelle-' . date('Y-m-d_H-i-s') . '.pdf');
+    }
+
+    /**
+     * Export annual TVA declarations to Excel.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function exportAnnuelleExcel(Request $request)
+    {
+        $search = $request->input('search');
+        return Excel::download(new TvaDeclarationsExport('annuelle', $search), 'tva-annuelle-' . date('Y-m-d_H-i-s') . '.xlsx');
     }
 }

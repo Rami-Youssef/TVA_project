@@ -6,6 +6,8 @@ use App\Http\Controllers\EntrepriseController;
 use App\Http\Controllers\CnssController;
 use App\Http\Controllers\EtatsController;
 use App\Http\Controllers\SuiviController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\TvaDeclarationController;
 
 Route::get('/', function () {
     return redirect(route('user.getAllUsers'));
@@ -20,6 +22,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('rtl', ['as' => 'pages.rtl', 'uses' => 'App\Http\Controllers\PageController@rtl']);
     Route::get('tables', ['as' => 'pages.tables', 'uses' => 'App\Http\Controllers\PageController@tables']);
     Route::get('user/getAllUsers', ['as' => 'user.getAllUsers', 'uses' => 'App\Http\Controllers\UserController@getAllUsers']);
+    Route::get('user', ['as' => 'user.index', 'uses' => 'App\Http\Controllers\UserController@index']);
     Route::get('entreprise', ['as' => 'entreprise.getAllEntreprises', 'uses' => 'App\Http\Controllers\EntrepriseController@getAllEntreprises']);
     
     // TVA Declarations view routes - accessible to all authenticated users
@@ -34,11 +37,37 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('cnss/{cnss}/edit', [CnssController::class, 'edit'])->name('cnss.edit');
     Route::put('cnss/{cnss}', [CnssController::class, 'update'])->name('cnss.update');
     Route::delete('cnss/{cnss}', [CnssController::class, 'destroy'])->name('cnss.delete');
+    Route::get('cnss/export/pdf', [CnssController::class, 'exportPdf'])->name('cnss.export.pdf');
+    Route::get('cnss/export/excel', [CnssController::class, 'exportExcel'])->name('cnss.export.excel');
     
     // Etats and Suivi Routes
     Route::get('etats', [EtatsController::class, 'index'])->name('etats.index');
     Route::get('suivi', [SuiviController::class, 'index'])->name('suivi.index');
     Route::get('suivi/{entreprise}', [SuiviController::class, 'show'])->name('suivi.show');
+
+    // User Export Routes
+    Route::get('users/export/pdf', [UserController::class, 'exportPdf'])->name('users.export.pdf');
+    Route::get('users/export/excel', [UserController::class, 'exportExcel'])->name('users.export.excel');
+
+    // Entreprise Export Routes
+    Route::get('entreprises/export/pdf', [EntrepriseController::class, 'exportPdf'])->name('entreprises.export.pdf');
+    Route::get('entreprises/export/excel', [EntrepriseController::class, 'exportExcel'])->name('entreprises.export.excel');
+
+    // TVA Declaration Export Routes
+    Route::get('tva-declarations/mensuelle/export/pdf', [TvaDeclarationController::class, 'exportMensuellePdf'])->name('tva-declaration.mensuelle.export.pdf');
+    Route::get('tva-declarations/mensuelle/export/excel', [TvaDeclarationController::class, 'exportMensuelleExcel'])->name('tva-declaration.mensuelle.export.excel');
+    Route::get('tva-declarations/trimestrielle/export/pdf', [TvaDeclarationController::class, 'exportTrimestriellePdf'])->name('tva-declaration.trimestrielle.export.pdf');
+    Route::get('tva-declarations/trimestrielle/export/excel', [TvaDeclarationController::class, 'exportTrimestrielleExcel'])->name('tva-declaration.trimestrielle.export.excel');
+    Route::get('tva-declarations/annuelle/export/pdf', [TvaDeclarationController::class, 'exportAnnuellePdf'])->name('tva-declaration.annuelle.export.pdf');
+    Route::get('tva-declarations/annuelle/export/excel', [TvaDeclarationController::class, 'exportAnnuelleExcel'])->name('tva-declaration.annuelle.export.excel');
+
+    // Etats Export Routes
+    Route::get('etats/export/pdf', [EtatsController::class, 'exportPdf'])->name('etats.export.pdf');
+    Route::get('etats/export/excel', [EtatsController::class, 'exportExcel'])->name('etats.export.excel');
+
+    // Suivi Export Routes
+    Route::get('suivi/export/pdf', [SuiviController::class, 'exportPdf'])->name('suivi.export.pdf');
+    Route::get('suivi/export/excel', [SuiviController::class, 'exportExcel'])->name('suivi.export.excel');
 });
 
 Route::group(['middleware' => ['auth', 'AdminPrivilege']], function () {

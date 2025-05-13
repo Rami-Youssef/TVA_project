@@ -6,6 +6,9 @@ use App\Models\Cnss;
 use App\Models\Entreprise;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\CnssExport;
 
 class CnssController extends Controller
 {
@@ -144,5 +147,84 @@ class CnssController extends Controller
     {
         $cnss->delete();
         return redirect()->route('cnss.index')->withStatus(__('Déclaration CNSS supprimée avec succès.'));
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $search = $request->input('search');
+        $filter = $request->input('filter', 'all'); 
+        $declarations = $this->getFilteredDeclarations($search, $filter);
+        
+        $pdf = Pdf::loadView('cnss.pdf', [
+            'declarations' => $declarations, 
+            'monthName' => date('F Y')
+        ]);
+        
+        return $pdf->download('cnss-declarations-' . date('Y-m-d') . '.pdf');
+    }
+    
+    public function exportExcel(Request $request)
+    {
+        $search = $request->input('search');
+        $filter = $request->input('filter', 'all');
+        $declarations = $this->getFilteredDeclarations($search, $filter);
+        
+        return Excel::download(new CnssExport($declarations), 'cnss-declarations-' . date('Y-m-d') . '.xlsx');
+    }
+    
+    /**
+     * Get filtered declarations based on search and filter parameters
+     * This method extracts the common code from index and export methods
+     */
+    private function getFilteredDeclarations($search, $filter)
+    {
+        $currentMonth = date('n'); 
+        $currentYear = date('Y');  
+        
+        // Get all companies
+        $allEntreprises = Entreprise::query();
+        
+        // Apply search filter to companies if needed
+        if ($search) {
+            $allEntreprises->where('nom', 'like', "%{$search}%");
+        }
+        
+        // Get the filtered companies
+        $entreprises = $allEntreprises->get();
+        
+        // Prepare the result collection
+        $declarations = collect();
+        
+        foreach ($entreprises as $entreprise) {
+            // Check if the company has a CNSS declaration for the current month
+            $declaration = Cnss::where('entreprise_id', $entreprise->id)
+                ->where('Mois', $currentMonth)
+                ->where('annee', $currentYear)
+                ->first();
+            
+            if ($declaration) {
+                // Company has declared - include it based on filter
+                if ($filter === 'all' || $filter === 'declared') {
+                    $declarations->push($declaration);
+                }
+            } else {
+                // Company hasn't declared - create a placeholder and include based on filter
+                if ($filter === 'all' || $filter === 'undeclared') {
+                    // Create a non-persisted model instance for display
+                    $placeholder = new Cnss([
+                        'entreprise_id' => $entreprise->id,
+                        'Mois' => $currentMonth,
+                        'annee' => $currentYear,
+                        'Nbr_Salries' => null,
+                        'etat' => 'non_valide'
+                    ]);
+                    $placeholder->exists = false; // Mark as non-persisted
+                    $placeholder->entreprise = $entreprise; // Set relationship manually
+                    $declarations->push($placeholder);
+                }
+            }
+        }
+        
+        return $declarations;
     }
 }

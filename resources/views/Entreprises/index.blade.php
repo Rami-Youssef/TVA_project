@@ -33,6 +33,18 @@
             </div>
           </div>
         </form>
+
+        <!-- Export Buttons -->
+        <div class="col-md-2 text-right mb-4">
+          <div class="btn-group">
+            <a href="{{ route('entreprises.export.pdf', ['search' => $search ?? '', 'filter' => $filter ?? 'all']) }}" class="btn btn-sm btn-info">
+              <i class="tim-icons icon-paper"></i> PDF
+            </a>
+            <a href="{{ route('entreprises.export.excel', ['search' => $search ?? '', 'filter' => $filter ?? 'all']) }}" class="btn btn-sm btn-success">
+              <i class="tim-icons icon-chart-bar-32"></i> Excel
+            </a>
+          </div>
+        </div>
         
         <div class="table-responsive">
           <table class="table tablesorter">

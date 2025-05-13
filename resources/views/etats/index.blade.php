@@ -53,6 +53,20 @@
                             </div>
                         </div>
                     </form>
+
+                    <!-- Export Buttons -->
+                    <div class="row mb-3">
+                        <div class="col-12 text-right">
+                            <div class="btn-group">
+                                <a href="{{ route('etats.export.pdf', ['search' => $search ?? '', 'etat_filter' => request('etat_filter'), 'sort_by' => request('sort_by')]) }}" class="btn btn-sm btn-info">
+                                    <i class="tim-icons icon-paper"></i> PDF
+                                </a>
+                                <a href="{{ route('etats.export.excel', ['search' => $search ?? '', 'etat_filter' => request('etat_filter'), 'sort_by' => request('sort_by')]) }}" class="btn btn-sm btn-success">
+                                    <i class="tim-icons icon-chart-bar-32"></i> Excel
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                     
                     <div class="table-responsive">
                         <table class="table tablesorter" id="">

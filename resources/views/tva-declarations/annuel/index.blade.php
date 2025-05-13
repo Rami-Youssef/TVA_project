@@ -13,6 +13,20 @@
                 @endif
             </div>
             <div class="card-body">
+                <!-- Export Buttons -->
+                <div class="row mb-3">
+                    <div class="col-12 text-right">
+                        <div class="btn-group">
+                            <a href="{{ route('tva-declaration.annuelle.export.pdf') }}" class="btn btn-sm btn-info">
+                                <i class="tim-icons icon-paper"></i> PDF
+                            </a>
+                            <a href="{{ route('tva-declaration.annuelle.export.excel') }}" class="btn btn-sm btn-success">
+                                <i class="tim-icons icon-chart-bar-32"></i> Excel
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="table-responsive">
                     <table class="table tablesorter">
                         <thead class="text-primary">

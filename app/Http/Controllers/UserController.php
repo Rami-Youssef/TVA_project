@@ -9,6 +9,9 @@ use App\Http\Requests\PasswordRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf; // Or your preferred PDF library
 
 class UserController extends Controller
 {
@@ -56,10 +59,10 @@ class UserController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UserRequest $request, User $user)
-{
-    $user->update($request->validated()); // Use validated data from UserRequest
-    return redirect()->route('user.getAllUsers')->withStatus(__('User successfully updated.'));
-}
+    {
+        $user->update($request->validated()); // Use validated data from UserRequest
+        return redirect()->route('user.getAllUsers')->withStatus(__('User successfully updated.'));
+    }
 
 
     /**
@@ -84,23 +87,72 @@ class UserController extends Controller
         return redirect()->route('user.getAllUsers')->withStatus(__('User successfully deleted.'));
     }
 
+    private function getFilteredUsersQuery(Request $request)
+    {
+        $search = $request->input('search');
+        $roleFilter = $request->input('role_filter');
+
+        $query = User::query();
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        if ($roleFilter && $roleFilter !== 'all') {
+            $query->where('role', $roleFilter);
+        }
+        
+        return $query->orderBy('created_at', 'desc');
+    }
+
     /**get all users*/
     public function getAllUsers(Request $request)
     {
-        $search = $request->input('search');
-        
-        $query = User::query();
-        
-        if ($search) {
-            $query->where('name', 'like', "%{$search}%");
-        }
-        
+        return $this->index($request);
+    }
+    
+    /**
+     * Display a listing of users with filtering.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
+    public function index(Request $request)
+    {
+        $query = $this->getFilteredUsersQuery($request);
         $users = $query->paginate(10);
+
+        // Append all current filters to pagination links
+        $users->appends($request->all());
         
-        if ($search) {
-            $users->appends(['search' => $search]);
-        }
+        // Get distinct roles for the filter dropdown
+        $roles = User::select('role')->distinct()->pluck('role');
+
+        return view('users.index', [
+            'users' => $users,
+            'search' => $request->input('search'),
+            'role_filter' => $request->input('role_filter'),
+            'roles' => $roles
+        ]);
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $query = $this->getFilteredUsersQuery($request);
+        $users = $query->get();
         
-        return view('pages.tables', compact('users', 'search'));
+        $pdf = Pdf::loadView('users.pdf', compact('users'));
+        return $pdf->download('users-'.date('Y-m-d_H-i-s').'.pdf');
+    }
+
+    public function exportExcel(Request $request)
+    {
+        $search = $request->input('search');
+        $roleFilter = $request->input('role_filter');
+
+        return Excel::download(new UsersExport($search, $roleFilter), 'users-'.date('Y-m-d_H-i-s').'.xlsx');
     }
 }
