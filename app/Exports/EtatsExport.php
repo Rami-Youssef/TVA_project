@@ -74,7 +74,6 @@ class EtatsExport implements FromQuery, WithHeadings, WithMapping
             'Montant Total Salaires',
             'Montant CNSS',
             'État',
-            'Date Déclaration',
         ];
     }
 
@@ -89,7 +88,6 @@ class EtatsExport implements FromQuery, WithHeadings, WithMapping
             number_format($cnss->Tot_Salaires, 2, ',', ' ') . ' MAD',
             number_format($cnss->Mnt_Cnss, 2, ',', ' ') . ' MAD',
             $cnss->etat === 'valide' ? 'Déclaré' : 'Non déclaré',
-            $cnss->date_declaration ? (new \Carbon\Carbon($cnss->date_declaration))->format('d/m/Y') : 'N/A',
         ];
     }
 }

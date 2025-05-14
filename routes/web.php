@@ -68,6 +68,8 @@ Route::group(['middleware' => 'auth'], function () {
     // Suivi Export Routes
     Route::get('suivi/export/pdf', [SuiviController::class, 'exportPdf'])->name('suivi.export.pdf');
     Route::get('suivi/export/excel', [SuiviController::class, 'exportExcel'])->name('suivi.export.excel');
+    Route::get('suivi/{entreprise}/export/pdf', [SuiviController::class, 'exportEnreprisePdf'])->name('suivi.entreprise.export.pdf');
+    Route::get('suivi/{entreprise}/export/excel', [SuiviController::class, 'exportEntrepriseExcel'])->name('suivi.entreprise.export.excel');
 });
 
 Route::group(['middleware' => ['auth', 'AdminPrivilege']], function () {

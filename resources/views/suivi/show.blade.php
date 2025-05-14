@@ -3,8 +3,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
+            <div class="card">                <div class="card-header">
                     <div class="row">
                         <div class="col-8">
                             <h4 class="card-title">Déclarations CNSS pour {{ $entreprise->nom }}</h4>
@@ -20,9 +19,22 @@
                             @endif
                         </div>
                     </div>
-                </div>
-                <div class="card-body">
+                </div>                <div class="card-body">
                     @include('alerts.success')
+                    
+                    <div class="row mb-3">
+                        <div class="col-12 text-right">
+                            <div class="btn-group">
+                                <a href="{{ route('suivi.entreprise.export.pdf', $entreprise->id) }}" class="btn btn-sm btn-info">
+                                    <i class="tim-icons icon-paper"></i> PDF
+                                </a>
+                                <a href="{{ route('suivi.entreprise.export.excel', $entreprise->id) }}" class="btn btn-sm btn-success">
+                                    <i class="tim-icons icon-chart-bar-32"></i> Excel
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="table-responsive">
                         <table class="table tablesorter" id="">
                             <thead class="text-primary">

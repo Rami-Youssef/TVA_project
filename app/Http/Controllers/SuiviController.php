@@ -106,12 +106,44 @@ class SuiviController extends Controller
 
         $pdf = Pdf::loadView('suivi.pdf', compact('entreprises'));
         return $pdf->download('suivi-entreprises-' . date('Y-m-d_H-i-s') . '.pdf');
-    }
-
-    public function exportExcel(Request $request)
+    }    public function exportExcel(Request $request)
     {
         $search = $request->input('search');
 
         return Excel::download(new SuiviExport($search), 'suivi-entreprises-' . date('Y-m-d_H-i-s') . '.xlsx');
+    }
+    
+    public function exportEnreprisePdf($entrepriseId)
+    {
+        $entreprise = Entreprise::findOrFail($entrepriseId);
+        $declarations = Cnss::where('entreprise_id', $entrepriseId)
+            ->orderBy('annee', 'desc')
+            ->orderBy('Mois', 'desc')
+            ->get();
+            
+        $pdf = Pdf::loadView('suivi.entreprise-pdf', compact('entreprise', 'declarations'));
+        return $pdf->download('declarations-cnss-' . $entreprise->nom . '-' . date('Y-m-d_H-i-s') . '.pdf');
+    }
+    
+    public function exportEntrepriseExcel($entrepriseId)
+    {
+        $entreprise = Entreprise::findOrFail($entrepriseId);
+        
+        // Create a custom collection for export
+        $declarations = Cnss::where('entreprise_id', $entrepriseId)
+            ->orderBy('annee', 'desc')
+            ->orderBy('Mois', 'desc')
+            ->get()
+            ->map(function ($declaration) {
+                return [
+                    'Mois' => $declaration->french_month,
+                    'Année' => $declaration->annee,
+                    'Nombre de Salariés' => $declaration->Nbr_Salries,
+                    'État' => $declaration->etat === 'valide' ? 'Déclaré' : 'Non déclaré',
+                ];
+            });
+            
+        return Excel::download(new \Maatwebsite\Excel\Exports\ArrayExport($declarations->toArray()), 
+            'declarations-cnss-' . $entreprise->nom . '-' . date('Y-m-d_H-i-s') . '.xlsx');
     }
 }
