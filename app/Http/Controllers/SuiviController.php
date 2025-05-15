@@ -143,7 +143,7 @@ class SuiviController extends Controller
                 ];
             });
             
-        return Excel::download(new \Maatwebsite\Excel\Exports\ArrayExport($declarations->toArray()), 
+        return Excel::download(new \App\Exports\CnssEntrepriseExport($declarations), 
             'declarations-cnss-' . $entreprise->nom . '-' . date('Y-m-d_H-i-s') . '.xlsx');
     }
 }
