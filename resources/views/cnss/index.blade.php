@@ -87,14 +87,14 @@
                                                     @if($declaration->exists !== false)
                                                         @if(Auth::user()->role === 'super_admin')
                                                             <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('cnss.edit', $declaration->id) }}'">
-                                                                Edit
+                                                                Modifier
                                                             </button>
                                                             <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal-{{ $declaration->id }}">
-                                                                Delete
+                                                                Supprimer
                                                             </button>
                                                         @elseif(Auth::user()->role === 'admin')
                                                             <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('cnss.edit', $declaration->id) }}'">
-                                                                Edit
+                                                                Modifier
                                                             </button>
                                                         @endif
                                                     @else

@@ -99,14 +99,14 @@
                                                 <div class="d-flex justify-content-center" style="gap: 0.5rem;">
                                                     @if(Auth::user()->role === 'super_admin')
                                                         <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('cnss.edit', $declaration->id) }}'">
-                                                            Edit
+                                                            Modifier
                                                         </button>
                                                         <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal-{{ $user->id }}">
-                                                            Delete
+                                                            Supprimer
                                                         </button>
                                                     @elseif(Auth::user()->role === 'admin')
                                                         <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('cnss.edit', $declaration->id) }}'">
-                                                            Edit
+                                                            Modifier
                                                         </button>
                                                     @endif
                                                 </div>

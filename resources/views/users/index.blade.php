@@ -65,18 +65,18 @@
                                             <div class="d-flex justify-content-center" style="gap: 0.5rem;">
                                                 @if (auth()->user()->id != $user->id)
                                                     <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('user.edit', $user) }}'">
-                                                        Edit
+                                                        Modifier
                                                     </button>
                                                     <form action="{{ route('user.delete', $user) }}" method="post" style="display: inline;">
                                                         @csrf
                                                         @method('delete')
                                                         <button type="button" class="btn btn-danger btn-sm" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
-                                                            Delete
+                                                            Supprimer
                                                         </button>
                                                     </form>
                                                 @else
                                                     <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('profile.edit') }}'">
-                                                        Edit
+                                                        Modifier
                                                     </button>
                                                 @endif
                                             </div>

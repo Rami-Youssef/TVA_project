@@ -73,17 +73,17 @@
                         CNSS
                       </button>
                       <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('entreprise.edit', $entreprise->id) }}'">
-                        Edit
+                        Modifier
                       </button>
                       <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal-{{ $entreprise->id }}">
-                        Delete
+                        Supprimer
                       </button>
                     @elseif(Auth::user()->role === 'admin')
                       <button class="btn btn-info btn-sm" onclick="window.location.href='{{ route('cnss.create', ['entreprise_id' => $entreprise->id]) }}'">
                         CNSS
                       </button>
                       <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('entreprise.edit', $entreprise->id) }}'">
-                        Edit
+                        Modifier
                       </button>
                     @endif
                   </div>

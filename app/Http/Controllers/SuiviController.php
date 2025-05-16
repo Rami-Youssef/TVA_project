@@ -99,19 +99,6 @@ class SuiviController extends Controller
         return $result;
     }
 
-    public function exportPdf(Request $request)
-    {
-        $query = $this->getFilteredEntreprisesQuery($request);
-        $entreprises = $query->get();
-
-        $pdf = Pdf::loadView('suivi.pdf', compact('entreprises'));
-        return $pdf->download('suivi-entreprises-' . date('Y-m-d_H-i-s') . '.pdf');
-    }    public function exportExcel(Request $request)
-    {
-        $search = $request->input('search');
-
-        return Excel::download(new SuiviExport($search), 'suivi-entreprises-' . date('Y-m-d_H-i-s') . '.xlsx');
-    }
     
     public function exportEnreprisePdf($entrepriseId)
     {
