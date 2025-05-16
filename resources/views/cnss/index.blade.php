@@ -17,43 +17,36 @@
                             @endif
                         </div>
                     </div>
+                    <!-- Search and Filter Form -->
+                    <form method="GET" action="{{ route('cnss.index') }}" class="form-inline">
+                        <div class="form-group mr-2">
+                            <input type="text" name="search" class="form-control" placeholder="Rechercher par société..." value="{{ $search ?? '' }}">
+                        </div>
+                        <div class="form-group mr-2">
+                            <select name="filter" class="form-control">
+                                <option value="all" {{ ($filter ?? '') == 'all' ? 'selected' : '' }}>Toutes les déclarations</option>
+                                <option value="declared" {{ ($filter ?? '') == 'declared' ? 'selected' : '' }}>Déclarées</option>
+                                <option value="undeclared" {{ ($filter ?? '') == 'undeclared' ? 'selected' : '' }}>Non déclarées</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-default">Filtrer</button>
+                        <a href="{{ route('cnss.index') }}" class="btn btn-sm btn-secondary ml-2">Réinitialiser</a>
+                    </form>
                 </div>
                 <div class="card-body">
                     @include('alerts.success')
-                    
-                    <!-- Search and Filter Form -->
-                    <form action="{{ route('cnss.index') }}" method="GET" class="mb-4">
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text"><i class="tim-icons icon-zoom-split"></i></div>
-                                    </div>
-                                    <input type="text" name="search" class="form-control" placeholder="Rechercher par société..." value="{{ $search ?? '' }}">
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <select name="filter" class="form-control">
-                                    <option value="all" {{ ($filter ?? '') == 'all' ? 'selected' : '' }}>Toutes les déclarations</option>
-                                    <option value="declared" {{ ($filter ?? '') == 'declared' ? 'selected' : '' }}>Déclarées</option>
-                                    <option value="undeclared" {{ ($filter ?? '') == 'undeclared' ? 'selected' : '' }}>Non déclarées</option>
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <button type="submit" class="btn btn-primary">Filtrer</button>
-                            </div>
-                            <div class="col-md-2 text-right">
-                                <div class="btn-group">
-                                    <a href="{{ route('cnss.export.pdf', ['search' => $search ?? '', 'filter' => $filter ?? 'all']) }}" class="btn btn-sm btn-info">
-                                        <i class="tim-icons icon-paper"></i> PDF
-                                    </a>
-                                    <a href="{{ route('cnss.export.excel', ['search' => $search ?? '', 'filter' => $filter ?? 'all']) }}" class="btn btn-sm btn-success">
-                                        <i class="tim-icons icon-chart-bar-32"></i> Excel
-                                    </a>
-                                </div>
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            <div class="btn-group">
+                                <a href="{{ route('cnss.export.pdf', ['search' => $search ?? '', 'filter' => $filter ?? 'all']) }}" class="btn btn-sm btn-info">
+                                    <i class="tim-icons icon-paper"></i> PDF
+                                </a>
+                                <a href="{{ route('cnss.export.excel', ['search' => $search ?? '', 'filter' => $filter ?? 'all']) }}" class="btn btn-sm btn-success">
+                                    <i class="tim-icons icon-chart-bar-32"></i> Excel
+                                </a>
                             </div>
                         </div>
-                    </form>
+                    </div>
                     
                     <div class="table-responsive">
                         <table class="table tablesorter" id="">
