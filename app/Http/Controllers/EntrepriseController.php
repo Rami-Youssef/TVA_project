@@ -101,6 +101,10 @@ class EntrepriseController extends Controller
         $search = $request->input('search');
         $etatFilter = $request->input('etat_filter', 'all'); // Default to 'all'
         $sortBy = $request->input('sort_by');
+        $forme_juridique_filter = $request->input('forme_juridique_filter', 'all'); // Default to 'all'
+        
+        // Get all unique forme juridique values for the dropdown
+        $formesJuridiques = Entreprise::distinct()->pluck('form_juridique')->filter()->values()->toArray();
         
         $query = $this->getFilteredEntreprisesQuery($request);
         
@@ -109,7 +113,14 @@ class EntrepriseController extends Controller
         // Preserve all query parameters in pagination links
         $entreprises->appends($request->except('page')); // Use except('page') for cleaner URLs
         
-        return view('entreprises.index', compact('entreprises', 'search', 'etatFilter', 'sortBy'));
+        return view('entreprises.index', compact(
+            'entreprises', 
+            'search', 
+            'etatFilter', 
+            'sortBy', 
+            'formesJuridiques',
+            'forme_juridique_filter'
+        ));
     }
 
     private function getFilteredEntreprisesQuery(Request $request)
@@ -117,6 +128,7 @@ class EntrepriseController extends Controller
         $search = $request->input('search');
         $etatFilter = $request->input('etat_filter', 'all');
         $sortBy = $request->input('sort_by');
+        $forme_juridique_filter = $request->input('forme_juridique_filter', 'all');
 
         $query = Entreprise::query();
 
@@ -128,6 +140,11 @@ class EntrepriseController extends Controller
                   ->orWhere('email', 'like', "%{$search}%")
                   ->orWhere('telephone', 'like', "%{$search}%");
             });
+        }
+        
+        // Apply forme juridique filter
+        if ($forme_juridique_filter && $forme_juridique_filter !== 'all') {
+            $query->where('form_juridique', $forme_juridique_filter);
         }
         
         // Apply etat filter (assuming 'etat' is on a related 'cnssDeclarations' model)

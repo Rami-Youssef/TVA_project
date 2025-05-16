@@ -14,33 +14,27 @@
       </div>
       <div class="card-body">
         <!-- Search and Filter Form -->
-        <form action="{{ route('entreprise.getAllEntreprises') }}" method="GET" class="mb-4">
-          <div class="row">
-            <div class="col-md-4">
-              <div class="input-group">
-                <input type="text" name="search" class="form-control" placeholder="Rechercher par nom..." value="{{ $search ?? '' }}">
-                <div class="input-group-append">
-                  <button class="btn btn-primary" type="submit">
-                    <i class="tim-icons icon-zoom-split"></i>
-                  </button>
-                  @if(isset($search) && $search)
-                    <a href="{{ route('entreprise.getAllEntreprises') }}" class="btn btn-danger">
-                      <i class="tim-icons icon-simple-remove"></i>
-                    </a>
-                  @endif
-                </div>
-              </div>
-            </div>
+        <form action="{{ route('entreprise.getAllEntreprises') }}" method="GET" class="form-inline mb-4">
+          <div class="form-group mr-2">
+            <input type="text" name="search" class="form-control" placeholder="Rechercher par nom..." value="{{ $search ?? '' }}">
           </div>
-        </form>
-
-        <!-- Export Buttons -->
+          <div class="form-group mr-2">
+            <select name="forme_juridique_filter" class="form-control">
+              <option value="all">Toutes les Formes Juridiques</option>
+              @foreach($formesJuridiques as $forme)
+                <option value="{{ $forme }}" {{ ($forme_juridique_filter ?? '') == $forme ? 'selected' : '' }}>{{ ucfirst($forme) }}</option>
+              @endforeach
+            </select>
+          </div>
+          <button type="submit" class="btn btn-sm btn-default">Filtrer</button>
+          <a href="{{ route('entreprise.getAllEntreprises') }}" class="btn btn-sm btn-secondary ml-2">Réinitialiser</a>
+        </form>        <!-- Export Buttons -->
         <div class="col-md-2 text-right mb-4">
           <div class="btn-group">
-            <a href="{{ route('entreprises.export.pdf', ['search' => $search ?? '', 'filter' => $filter ?? 'all']) }}" class="btn btn-sm btn-info">
+            <a href="{{ route('entreprises.export.pdf', ['search' => $search ?? '', 'filter' => $filter ?? 'all', 'forme_juridique_filter' => $forme_juridique_filter ?? 'all']) }}" class="btn btn-sm btn-info">
               <i class="tim-icons icon-paper"></i> PDF
             </a>
-            <a href="{{ route('entreprises.export.excel', ['search' => $search ?? '', 'filter' => $filter ?? 'all']) }}" class="btn btn-sm btn-success">
+            <a href="{{ route('entreprises.export.excel', ['search' => $search ?? '', 'filter' => $filter ?? 'all', 'forme_juridique_filter' => $forme_juridique_filter ?? 'all']) }}" class="btn btn-sm btn-success">
               <i class="tim-icons icon-chart-bar-32"></i> Excel
             </a>
           </div>
