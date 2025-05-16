@@ -37,7 +37,6 @@
                                 <option value="Société à Responsabilité Limitée (SARL)" {{ old('form_juridique') == 'Société à Responsabilité Limitée (SARL)' ? 'selected' : '' }}>SARL</option>
                                 <option value="Société Anonyme (SA)" {{ old('form_juridique') == 'Société Anonyme (SA)' ? 'selected' : '' }}>SA</option>
                                 <option value="Entreprise Individuelle (EI)" {{ old('form_juridique') == 'Entreprise Individuelle (EI)' ? 'selected' : '' }}>EI</option>
-                                <option value="Auto-Entrepreneur" {{ old('form_juridique') == 'Auto-Entrepreneur' ? 'selected' : '' }}>Auto-Entrepreneur</option>
                             </select>
                             @include('alerts.feedback', ['field' => 'form_juridique'])
                         </div>
