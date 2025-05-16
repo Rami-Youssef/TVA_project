@@ -3,59 +3,40 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
+            <div class="card">                <div class="card-header">
                     <div class="row">
                         <div class="col-8">
                             <h4 class="card-title">Liste des États CNSS</h4>
                         </div>
                     </div>
+                    <!-- Search and Filter Form -->
+                    <form method="GET" action="{{ route('etats.index') }}" class="form-inline">
+                        <div class="form-group mr-2">
+                            <input type="text" name="search" class="form-control" placeholder="Rechercher par nom d'entreprise..." value="{{ $search ?? '' }}">
+                        </div>
+                        <div class="form-group mr-2">
+                            <select name="etat_filter" class="form-control">
+                                <option value="">Filtrer par état</option>
+                                <option value="valide" {{ request('etat_filter') == 'valide' ? 'selected' : '' }}>Déclarées</option>
+                                <option value="non_valide" {{ request('etat_filter') == 'non_valide' ? 'selected' : '' }}>Non Déclarées</option>
+                            </select>
+                        </div>
+                        <div class="form-group mr-2">
+                            <select name="sort_by" class="form-control">
+                                <option value="">Trier par</option>
+                                <option value="nom_asc" {{ request('sort_by') == 'nom_asc' ? 'selected' : '' }}>Entreprise (A-Z)</option>
+                                <option value="nom_desc" {{ request('sort_by') == 'nom_desc' ? 'selected' : '' }}>Entreprise (Z-A)</option>
+                                <option value="date_asc" {{ request('sort_by') == 'date_asc' ? 'selected' : '' }}>Date (Ancienne)</option>
+                                <option value="date_desc" {{ request('sort_by') == 'date_desc' ? 'selected' : '' }}>Date (Récente)</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-default">Filtrer</button>
+                        <a href="{{ route('etats.index') }}" class="btn btn-sm btn-secondary ml-2">Réinitialiser</a>
+                    </form>
                 </div>
                 <div class="card-body">
-                    @include('alerts.success')
-                    
-                    <!-- Search and Filter Form -->
-                    <form action="{{ route('etats.index') }}" method="GET" class="mb-4">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="input-group">
-                                    <input type="text" name="search" class="form-control" placeholder="Rechercher par nom d'entreprise..." value="{{ $search ?? '' }}">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-primary" type="submit">
-                                            <i class="tim-icons icon-zoom-split"></i>
-                                        </button>
-                                        @if(isset($search) && $search)
-                                            <a href="{{ route('etats.index') }}" class="btn btn-danger">
-                                                <i class="tim-icons icon-simple-remove"></i>
-                                            </a>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <select name="etat_filter" class="form-control">
-                                    <option value="">Filtrer par état</option>
-                                    <option value="valide" {{ request('etat_filter') == 'valide' ? 'selected' : '' }}>Déclarées</option>
-                                    <option value="non_valide" {{ request('etat_filter') == 'non_valide' ? 'selected' : '' }}>Non Déclarées</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <select name="sort_by" class="form-control">
-                                    <option value="">Trier par</option>
-                                    <option value="nom_asc" {{ request('sort_by') == 'nom_asc' ? 'selected' : '' }}>Entreprise (A-Z)</option>
-                                    <option value="nom_desc" {{ request('sort_by') == 'nom_desc' ? 'selected' : '' }}>Entreprise (Z-A)</option>
-                                    <option value="date_asc" {{ request('sort_by') == 'date_asc' ? 'selected' : '' }}>Date (Ancienne)</option>
-                                    <option value="date_desc" {{ request('sort_by') == 'date_desc' ? 'selected' : '' }}>Date (Récente)</option>
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <button type="submit" class="btn btn-info w-100">Appliquer</button>
-                            </div>
-                        </div>
-                    </form>
-
-                    <!-- Export Buttons -->
-                    <div class="row mb-3">
+                    @include('alerts.success')                    <!-- Export Buttons -->
+                    <div class="row">
                         <div class="col-12 text-right">
                             <div class="btn-group">
                                 <a href="{{ route('etats.export.pdf', ['search' => $search ?? '', 'etat_filter' => request('etat_filter'), 'sort_by' => request('sort_by')]) }}" class="btn btn-sm btn-info">
@@ -67,8 +48,7 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="table-responsive">
+                      <div class="">
                         <table class="table tablesorter" id="">
                             <thead class="text-primary">
                                 <tr>
@@ -100,8 +80,7 @@
                                                     @if(Auth::user()->role === 'super_admin')
                                                         <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('cnss.edit', $declaration->id) }}'">
                                                             Modifier
-                                                        </button>
-                                                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal-{{ $user->id }}">
+                                                        </button>                                                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal-{{ $declaration->id }}">
                                                             Supprimer
                                                         </button>
                                                     @elseif(Auth::user()->role === 'admin')
@@ -116,13 +95,7 @@
                                 @endforeach
                             </tbody>
                         </table>
-                    </div>
-
-                    <!-- Pagination Links -->
-                    <div class="d-flex justify-content-center mt-4">
-                        {{ $declarations->links() }}
-                    </div>
-
+                    </div>                    
                     <!-- Delete Confirmation Modals -->
                     @foreach ($declarations as $declaration)
                         <div class="modal fade" id="confirmDeleteModal-{{ $declaration->id }}" tabindex="-1" aria-hidden="true">
@@ -150,6 +123,11 @@
                             </div>
                         </div>
                     @endforeach
+                </div>
+                <div class="card-footer py-4">
+                    <nav class="d-flex justify-content-end" aria-label="...">
+                        {{ $declarations->appends(request()->except('page'))->links() }}
+                    </nav>
                 </div>
             </div>
         </div>
