@@ -30,31 +30,7 @@
         }
         
         #declarations-table thead th.tablesorter-headerAsc .sort-icon {
-            transform: translateY(-50%) rotate(180deg);
-        }        /* No search box styling needed */
-          /* Sort select styling */
-        #sort-select {
-            background-color: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.4);
-            color: white;
-            width: auto;
-            display: inline-block;
-            padding: 0.375rem 1.75rem 0.375rem 0.75rem;
-            font-size: 0.9rem;
-        }
-        
-        #sort-select:focus {
-            background-color: rgba(255, 255, 255, 0.25);
-            border-color: #e14eca;
-            box-shadow: 0 0 0 0.2rem rgba(225, 78, 202, 0.25);
-        }
-        
-        /* Sort select label */
-        label[for="sort-select"] {
-            margin-bottom: 0;
-            color: #c8c8c8;
-            font-weight: 500;
-        }
+            transform: translateY(-50%) rotate(180deg);        }        /* No search box styling needed */
         
         /* Row hover effect */
         .table.table-hover tbody tr:hover {
@@ -96,34 +72,27 @@
                                 <option value="valide" {{ ($etat_filter ?? '') == 'valide' ? 'selected' : '' }}>Déclarées</option>
                                 <option value="non_valide" {{ ($etat_filter ?? '') == 'non_valide' ? 'selected' : '' }}>Non déclarées</option>
                             </select>
-                        </div>
-                        <div class="form-group mr-2">
+                        </div>                        <div class="form-group mr-2">
                             <select name="year_filter" class="form-control">
                                 <option value="all">Toutes les années</option>
                                 @foreach($years as $year)
                                     <option value="{{ $year }}" {{ ($year_filter ?? '') == $year ? 'selected' : '' }}>{{ $year }}</option>
                                 @endforeach
                             </select>
-                        </div>                        <!-- Add hidden sort input to preserve sort preference in form submission -->
-                        <input type="hidden" name="sort_by" id="sort-form-input" value="{{ request('sort_by', 'date-desc') }}">                        <button type="submit" class="btn btn-sm btn-default">Filtrer</button>
-                        <a href="{{ route('suivi.show', ['entreprise' => $entreprise->id, 'sort_by' => request('sort_by', 'date-desc')]) }}" class="btn btn-sm btn-secondary ml-2">Réinitialiser</a>
-                    </form>
-                </div>                
-                <div class="card-body">
-                    @include('alerts.success')                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <!-- Sorting options -->
-                            <div class="form-group d-flex align-items-center">
-                                <label for="sort-select" class="mr-2">Trier par:</label>
-                                <select id="sort-select" class="form-control form-control-sm">
-                                    <option value="date-desc">Plus récentes</option>
-                                    <option value="date-asc">Plus anciennes</option>
-                                    <option value="employees-desc">Salariés ↓</option>
-                                    <option value="employees-asc">Salariés ↑</option>
-                                </select>
-                            </div>
+                        </div>                        <div class="form-group mr-2">
+                            <select name="sort_by" id="sort-select" class="form-control">
+                                <option value="date-desc" {{ request('sort_by') == 'date-desc' ? 'selected' : '' }}>Trier: Date ↓</option>
+                                <option value="date-asc" {{ request('sort_by') == 'date-asc' ? 'selected' : '' }}>Trier: Date ↑</option>
+                                <option value="employees-desc" {{ request('sort_by') == 'employees-desc' ? 'selected' : '' }}>Trier: Salariés ↓</option>
+                                <option value="employees-asc" {{ request('sort_by') == 'employees-asc' ? 'selected' : '' }}>Trier: Salariés ↑</option>
+                            </select>
                         </div>
-                        <div class="col-md-6 text-right">
+                        <button type="submit" class="btn btn-sm btn-default">Filtrer</button>
+                        <a href="{{ route('suivi.show', ['entreprise' => $entreprise->id, 'sort_by' => 'date-desc']) }}" class="btn btn-sm btn-secondary ml-2">Réinitialiser</a>
+                    </form>
+                </div>                  <div class="card-body">
+                    @include('alerts.success')                    <div class="row mb-3">
+                        <div class="col-12 text-right">
                             <div class="btn-group">
                                 <a href="{{ route('suivi.entreprise.export.pdf', ['id' => $entreprise->id, 'etat_filter' => $etat_filter ?? 'all', 'year_filter' => $year_filter ?? 'all', 'sort_by' => request('sort_by')]) }}" class="btn btn-sm btn-info">
                                     <i class="tim-icons icon-paper"></i> PDF
@@ -177,10 +146,13 @@
                                 @endforeach
                             </tbody>
                         </table>
-                    </div>                    
-                    <!-- Pagination Links -->
+                    </div>                      <!-- Pagination Links -->
                     <div class="d-flex justify-content-center mt-4">
-                        {{ $declarations->appends(request()->except('page'))->links() }}
+                        {{ $declarations->appends([
+                            'etat_filter' => $etat_filter ?? 'all',
+                            'year_filter' => $year_filter ?? 'all',
+                            'sort_by' => $sort_by ?? 'date-desc'
+                        ])->links() }}
                     </div>
 
                     <!-- ApexCharts Employee Count Visualization -->
@@ -314,9 +286,8 @@
                 const urlParams = new URLSearchParams(window.location.search);
                 let sortValue = urlParams.get('sort_by') || sessionStorage.getItem('declarationsSortPreference') || 'date-desc';
                 
-                // Update dropdown and hidden form input
+                // Update dropdown
                 $("#sort-select").val(sortValue);
-                $("#sort-form-input").val(sortValue);
                 
                 // Save to session storage too for consistency
                 sessionStorage.setItem('declarationsSortPreference', sortValue);
@@ -339,43 +310,14 @@
                 }
             }
               // Apply saved sort preference on page load
-            applySortPreference();
-            
-            // Handle sorting dropdown changes
+            applySortPreference();            // When sort dropdown changes, immediately submit the form to fetch sorted data from server
             $("#sort-select").on("change", function() {
                 const sortValue = $(this).val();
-                
-                // Save preference
                 sessionStorage.setItem('declarationsSortPreference', sortValue);
                 
-                // Apply sorting to the visible table
-                const $table = $("#declarations-table");
-                switch(sortValue) {
-                    case "date-desc":
-                        // Sort by year desc then month desc
-                        $table.trigger("sorton", [[[1, 1], [0, 1]]]);
-                        break;
-                    case "date-asc":
-                        // Sort by year asc then month asc
-                        $table.trigger("sorton", [[[1, 0], [0, 0]]]);
-                        break;
-                    case "employees-desc":
-                        // Sort by number of employees desc
-                        $table.trigger("sorton", [[[2, 1]]]);
-                        break;
-                    case "employees-asc":
-                        // Sort by number of employees asc
-                        $table.trigger("sorton", [[[2, 0]]]);
-                        break;
-                }
-                  // For server-side pagination, we need to reload the page with the sort parameter
-                // to ensure sorting works across all pages, not just the current one
-                const currentUrl = new URL(window.location.href);
-                const params = new URLSearchParams(currentUrl.search);
-                params.set('sort_by', sortValue);
-                
-                // Reload the page with the new sort parameter to apply server-side sorting
-                window.location.href = currentUrl.pathname + '?' + params.toString();
+                // Submit the form to fetch properly sorted data from the server
+                // This ensures sorting is applied to ALL records before pagination
+                $(this).closest('form').submit();
             });
         });
           // Initialize the ApexCharts visualization

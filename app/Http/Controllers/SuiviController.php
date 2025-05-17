@@ -59,13 +59,16 @@ class SuiviController extends Controller
             $query->where('annee', $year_filter);
         }
         
-        // Apply sorting
+        // Apply explicit order by clause first before pagination
+        // This ensures consistent sort order across all pagination pages
         switch ($sort_by) {
             case 'date-desc':
-                $query->orderBy('annee', 'desc')->orderBy('Mois', 'desc');
+                $query->orderByRaw('CAST(annee AS UNSIGNED) DESC')
+                      ->orderByRaw('CAST(Mois AS UNSIGNED) DESC');
                 break;
             case 'date-asc':
-                $query->orderBy('annee', 'asc')->orderBy('Mois', 'asc');
+                $query->orderByRaw('CAST(annee AS UNSIGNED) ASC')
+                      ->orderByRaw('CAST(Mois AS UNSIGNED) ASC');
                 break;
             case 'employees-desc':
                 $query->orderBy('Nbr_Salries', 'desc');
@@ -74,11 +77,12 @@ class SuiviController extends Controller
                 $query->orderBy('Nbr_Salries', 'asc');
                 break;
             default:
-                $query->orderBy('annee', 'desc')->orderBy('Mois', 'desc');
+                $query->orderByRaw('CAST(annee AS UNSIGNED) DESC')
+                      ->orderByRaw('CAST(Mois AS UNSIGNED) DESC');
                 break;
         }
         
-        // Get filtered declarations for pagination
+        // After sorting, apply pagination
         $declarations = $query->paginate(10);
         
         // Get years for the year filter dropdown
@@ -175,13 +179,15 @@ class SuiviController extends Controller
             $query->where('annee', $year_filter);
         }
         
-        // Apply sorting
+        // Apply sorting consistently, same as in show method
         switch ($sort_by) {
             case 'date-desc':
-                $query->orderBy('annee', 'desc')->orderBy('Mois', 'desc');
+                $query->orderByRaw('CAST(annee AS UNSIGNED) DESC')
+                      ->orderByRaw('CAST(Mois AS UNSIGNED) DESC');
                 break;
             case 'date-asc':
-                $query->orderBy('annee', 'asc')->orderBy('Mois', 'asc');
+                $query->orderByRaw('CAST(annee AS UNSIGNED) ASC')
+                      ->orderByRaw('CAST(Mois AS UNSIGNED) ASC');
                 break;
             case 'employees-desc':
                 $query->orderBy('Nbr_Salries', 'desc');
@@ -190,7 +196,8 @@ class SuiviController extends Controller
                 $query->orderBy('Nbr_Salries', 'asc');
                 break;
             default:
-                $query->orderBy('annee', 'desc')->orderBy('Mois', 'desc');
+                $query->orderByRaw('CAST(annee AS UNSIGNED) DESC')
+                      ->orderByRaw('CAST(Mois AS UNSIGNED) DESC');
                 break;
         }
         
@@ -220,13 +227,15 @@ class SuiviController extends Controller
             $query->where('annee', $year_filter);
         }
         
-        // Apply sorting
+        // Apply sorting consistently, same as in show method
         switch ($sort_by) {
             case 'date-desc':
-                $query->orderBy('annee', 'desc')->orderBy('Mois', 'desc');
+                $query->orderByRaw('CAST(annee AS UNSIGNED) DESC')
+                      ->orderByRaw('CAST(Mois AS UNSIGNED) DESC');
                 break;
             case 'date-asc':
-                $query->orderBy('annee', 'asc')->orderBy('Mois', 'asc');
+                $query->orderByRaw('CAST(annee AS UNSIGNED) ASC')
+                      ->orderByRaw('CAST(Mois AS UNSIGNED) ASC');
                 break;
             case 'employees-desc':
                 $query->orderBy('Nbr_Salries', 'desc');
@@ -235,7 +244,8 @@ class SuiviController extends Controller
                 $query->orderBy('Nbr_Salries', 'asc');
                 break;
             default:
-                $query->orderBy('annee', 'desc')->orderBy('Mois', 'desc');
+                $query->orderByRaw('CAST(annee AS UNSIGNED) DESC')
+                      ->orderByRaw('CAST(Mois AS UNSIGNED) DESC');
                 break;
         }
         
