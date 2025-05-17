@@ -40,12 +40,41 @@ class SuiviController extends Controller
         return view('suivi.index', compact('entreprises', 'search'));
     }
     
-    public function show($entrepriseId)
+    public function show(Request $request, $entrepriseId)
     {
         $entreprise = Entreprise::findOrFail($entrepriseId);
-        $declarations = Cnss::where('entreprise_id', $entrepriseId)->orderBy('annee', 'asc')
-            ->orderBy('Mois', 'asc')->paginate(10);
-            
+        $etat_filter = $request->input('etat_filter', 'all');
+        $year_filter = $request->input('year_filter', 'all');
+        
+        $query = Cnss::where('entreprise_id', $entrepriseId);
+        
+        // Apply état filter
+        if ($etat_filter != 'all') {
+            $query->where('etat', $etat_filter);
+        }
+        
+        // Apply year filter
+        if ($year_filter != 'all') {
+            $query->where('annee', $year_filter);
+        }
+        
+        // Get filtered declarations for pagination
+        $declarations = $query->orderBy('annee', 'desc')
+                             ->orderBy('Mois', 'desc')
+                             ->paginate(10);
+        
+        // Get years for the year filter dropdown
+        $years = Cnss::where('entreprise_id', $entrepriseId)
+                    ->select('annee')
+                    ->distinct()
+                    ->orderBy('annee', 'desc')
+                    ->pluck('annee')
+                    ->toArray();
+        
+        // Apply request parameters to pagination links
+        $declarations->appends($request->all());
+        
+        // Get all declarations for the chart (unfiltered for complete view)
         $allDeclarations = Cnss::where('entreprise_id', $entrepriseId)
             ->orderBy('annee', 'asc')
             ->orderBy('Mois', 'asc')
@@ -53,7 +82,14 @@ class SuiviController extends Controller
         
         $chartData = $this->prepareMonthlyChartData($allDeclarations);
         
-        return view('suivi.show', compact('declarations', 'entreprise', 'chartData'));
+        return view('suivi.show', compact(
+            'declarations', 
+            'entreprise', 
+            'chartData',
+            'etat_filter',
+            'year_filter',
+            'years'
+        ));
     }
     
     private function prepareMonthlyChartData($declarations)
@@ -100,35 +136,64 @@ class SuiviController extends Controller
     }
 
     
-    public function exportEnreprisePdf($entrepriseId)
+    public function exportEnreprisePdf(Request $request, $id)
     {
+        $entrepriseId = $id;
         $entreprise = Entreprise::findOrFail($entrepriseId);
-        $declarations = Cnss::where('entreprise_id', $entrepriseId)
-            ->orderBy('annee', 'desc')
-            ->orderBy('Mois', 'desc')
-            ->get();
+        $etat_filter = $request->input('etat_filter', 'all');
+        $year_filter = $request->input('year_filter', 'all');
+        
+        $query = Cnss::where('entreprise_id', $entrepriseId);
+        
+        // Apply état filter
+        if ($etat_filter != 'all') {
+            $query->where('etat', $etat_filter);
+        }
+        
+        // Apply year filter
+        if ($year_filter != 'all') {
+            $query->where('annee', $year_filter);
+        }
+        
+        $declarations = $query->orderBy('annee', 'desc')
+                              ->orderBy('Mois', 'desc')
+                              ->get();
             
         $pdf = Pdf::loadView('suivi.entreprise-pdf', compact('entreprise', 'declarations'));
         return $pdf->download('declarations-cnss-' . $entreprise->nom . '-' . date('Y-m-d_H-i-s') . '.pdf');
     }
     
-    public function exportEntrepriseExcel($entrepriseId)
+    public function exportEntrepriseExcel(Request $request, $id)
     {
+        $entrepriseId = $id;
         $entreprise = Entreprise::findOrFail($entrepriseId);
+        $etat_filter = $request->input('etat_filter', 'all');
+        $year_filter = $request->input('year_filter', 'all');
+        
+        $query = Cnss::where('entreprise_id', $entrepriseId);
+        
+        // Apply état filter
+        if ($etat_filter != 'all') {
+            $query->where('etat', $etat_filter);
+        }
+        
+        // Apply year filter
+        if ($year_filter != 'all') {
+            $query->where('annee', $year_filter);
+        }
         
         // Create a custom collection for export
-        $declarations = Cnss::where('entreprise_id', $entrepriseId)
-            ->orderBy('annee', 'desc')
-            ->orderBy('Mois', 'desc')
-            ->get()
-            ->map(function ($declaration) {
-                return [
-                    'Mois' => $declaration->french_month,
-                    'Année' => $declaration->annee,
-                    'Nombre de Salariés' => $declaration->Nbr_Salries,
-                    'État' => $declaration->etat === 'valide' ? 'Déclaré' : 'Non déclaré',
-                ];
-            });
+        $declarations = $query->orderBy('annee', 'desc')
+                             ->orderBy('Mois', 'desc')
+                             ->get()
+                             ->map(function ($declaration) {
+                                 return [
+                                     'Mois' => $declaration->french_month,
+                                     'Année' => $declaration->annee,
+                                     'Nombre de Salariés' => $declaration->Nbr_Salries,
+                                     'État' => $declaration->etat === 'valide' ? 'Déclaré' : 'Non déclaré',
+                                 ];
+                             });
             
         return Excel::download(new \App\Exports\CnssEntrepriseExport($declarations), 
             'declarations-cnss-' . $entreprise->nom . '-' . date('Y-m-d_H-i-s') . '.xlsx');
