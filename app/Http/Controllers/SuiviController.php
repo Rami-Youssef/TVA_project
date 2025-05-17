@@ -45,6 +45,7 @@ class SuiviController extends Controller
         $entreprise = Entreprise::findOrFail($entrepriseId);
         $etat_filter = $request->input('etat_filter', 'all');
         $year_filter = $request->input('year_filter', 'all');
+        $sort_by = $request->input('sort_by', 'date-desc');
         
         $query = Cnss::where('entreprise_id', $entrepriseId);
         
@@ -58,10 +59,27 @@ class SuiviController extends Controller
             $query->where('annee', $year_filter);
         }
         
+        // Apply sorting
+        switch ($sort_by) {
+            case 'date-desc':
+                $query->orderBy('annee', 'desc')->orderBy('Mois', 'desc');
+                break;
+            case 'date-asc':
+                $query->orderBy('annee', 'asc')->orderBy('Mois', 'asc');
+                break;
+            case 'employees-desc':
+                $query->orderBy('Nbr_Salries', 'desc');
+                break;
+            case 'employees-asc':
+                $query->orderBy('Nbr_Salries', 'asc');
+                break;
+            default:
+                $query->orderBy('annee', 'desc')->orderBy('Mois', 'desc');
+                break;
+        }
+        
         // Get filtered declarations for pagination
-        $declarations = $query->orderBy('annee', 'desc')
-                             ->orderBy('Mois', 'desc')
-                             ->paginate(10);
+        $declarations = $query->paginate(10);
         
         // Get years for the year filter dropdown
         $years = Cnss::where('entreprise_id', $entrepriseId)
@@ -88,7 +106,8 @@ class SuiviController extends Controller
             'chartData',
             'etat_filter',
             'year_filter',
-            'years'
+            'years',
+            'sort_by'
         ));
     }
     
@@ -142,6 +161,7 @@ class SuiviController extends Controller
         $entreprise = Entreprise::findOrFail($entrepriseId);
         $etat_filter = $request->input('etat_filter', 'all');
         $year_filter = $request->input('year_filter', 'all');
+        $sort_by = $request->input('sort_by', 'date-desc');
         
         $query = Cnss::where('entreprise_id', $entrepriseId);
         
@@ -155,9 +175,26 @@ class SuiviController extends Controller
             $query->where('annee', $year_filter);
         }
         
-        $declarations = $query->orderBy('annee', 'desc')
-                              ->orderBy('Mois', 'desc')
-                              ->get();
+        // Apply sorting
+        switch ($sort_by) {
+            case 'date-desc':
+                $query->orderBy('annee', 'desc')->orderBy('Mois', 'desc');
+                break;
+            case 'date-asc':
+                $query->orderBy('annee', 'asc')->orderBy('Mois', 'asc');
+                break;
+            case 'employees-desc':
+                $query->orderBy('Nbr_Salries', 'desc');
+                break;
+            case 'employees-asc':
+                $query->orderBy('Nbr_Salries', 'asc');
+                break;
+            default:
+                $query->orderBy('annee', 'desc')->orderBy('Mois', 'desc');
+                break;
+        }
+        
+        $declarations = $query->get();
             
         $pdf = Pdf::loadView('suivi.entreprise-pdf', compact('entreprise', 'declarations'));
         return $pdf->download('declarations-cnss-' . $entreprise->nom . '-' . date('Y-m-d_H-i-s') . '.pdf');
@@ -169,6 +206,7 @@ class SuiviController extends Controller
         $entreprise = Entreprise::findOrFail($entrepriseId);
         $etat_filter = $request->input('etat_filter', 'all');
         $year_filter = $request->input('year_filter', 'all');
+        $sort_by = $request->input('sort_by', 'date-desc');
         
         $query = Cnss::where('entreprise_id', $entrepriseId);
         
@@ -182,9 +220,27 @@ class SuiviController extends Controller
             $query->where('annee', $year_filter);
         }
         
+        // Apply sorting
+        switch ($sort_by) {
+            case 'date-desc':
+                $query->orderBy('annee', 'desc')->orderBy('Mois', 'desc');
+                break;
+            case 'date-asc':
+                $query->orderBy('annee', 'asc')->orderBy('Mois', 'asc');
+                break;
+            case 'employees-desc':
+                $query->orderBy('Nbr_Salries', 'desc');
+                break;
+            case 'employees-asc':
+                $query->orderBy('Nbr_Salries', 'asc');
+                break;
+            default:
+                $query->orderBy('annee', 'desc')->orderBy('Mois', 'desc');
+                break;
+        }
+        
         // Create a custom collection for export
-        $declarations = $query->orderBy('annee', 'desc')
-                             ->orderBy('Mois', 'desc')
+        $declarations = $query
                              ->get()
                              ->map(function ($declaration) {
                                  return [
