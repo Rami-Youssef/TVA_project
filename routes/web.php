@@ -13,7 +13,7 @@ Route::get('/', function () {
     return redirect(route('user.getAllUsers'));
 });
 
-Auth::routes();
+Auth::routes(['register' => false, 'reset' => false]);
 
 Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home')->middleware('auth');
 

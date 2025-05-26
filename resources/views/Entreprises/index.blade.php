@@ -50,7 +50,7 @@
                 @if(Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin')
                   <th class="text-center">{{ __('Actions') }}</th>
                 @endif
-              </tr>
+              </tr> 
             </thead>
             <tbody>
               @foreach ($entreprises as $entreprise)
