@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const targetId = this.getAttribute('data-target');
             const passwordInput = document.getElementById(targetId);
             
-            // Toggle password visibility
+            
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 this.classList.add('visible');
