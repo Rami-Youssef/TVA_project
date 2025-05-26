@@ -161,22 +161,68 @@ class TvaDeclarationController extends Controller
     public function getMensuelle(Request $request)
     {
         $search = $request->input('search');
+        $periodeFilter = $request->input('periode_filter');
+        $sortBy = $request->input('sort_by');
         
         $query = TvaDeclaration::with('entreprise')->where('type', 'mensuelle');
         
+        // Apply search filter
         if ($search) {
             $query->whereHas('entreprise', function($q) use ($search) {
                 $q->where('nom', 'like', "%{$search}%");
             });
         }
         
-        $declarations = $query->orderBy('periode', 'desc')->paginate(10);
-        
-        if ($search) {
-            $declarations->appends(['search' => $search]);
+        // Apply periode filter
+        if ($periodeFilter) {
+            $query->where('periode', $periodeFilter);
         }
         
-        return view('tva-declarations.mensuel.index', compact('declarations', 'search'));
+        // Apply sorting
+        if ($sortBy) {
+            switch ($sortBy) {
+                case 'nom_asc':
+                    $query->join('entreprises', 'tva_declarations.entreprise_id', '=', 'entreprises.id')
+                         ->orderBy('entreprises.nom', 'asc')
+                         ->select('tva_declarations.*');
+                    break;
+                case 'nom_desc':
+                    $query->join('entreprises', 'tva_declarations.entreprise_id', '=', 'entreprises.id')
+                         ->orderBy('entreprises.nom', 'desc')
+                         ->select('tva_declarations.*');
+                    break;
+                case 'periode_asc':
+                    $query->orderBy('periode', 'asc');
+                    break;
+                case 'periode_desc':
+                    $query->orderBy('periode', 'desc');
+                    break;
+                case 'montant_asc':
+                    $query->orderBy('montant', 'asc');
+                    break;
+                case 'montant_desc':
+                    $query->orderBy('montant', 'desc');
+                    break;
+                default:
+                    $query->orderBy('periode', 'desc');
+                    break;
+            }
+        } else {
+            $query->orderBy('periode', 'desc');
+        }
+        
+        // Get distinct periodes for filter dropdown
+        $periodes = TvaDeclaration::where('type', 'mensuelle')
+                     ->select('periode')
+                     ->distinct()
+                     ->orderBy('periode', 'desc')
+                     ->pluck('periode')
+                     ->toArray();
+                     
+        $declarations = $query->paginate(10);
+        $declarations->appends($request->all());
+        
+        return view('tva-declarations.mensuel.index', compact('declarations', 'search', 'periodes', 'periodeFilter', 'sortBy'));
     }
 
     /**
@@ -187,22 +233,68 @@ class TvaDeclarationController extends Controller
     public function getTrimestrielle(Request $request)
     {
         $search = $request->input('search');
+        $periodeFilter = $request->input('periode_filter');
+        $sortBy = $request->input('sort_by');
         
         $query = TvaDeclaration::with('entreprise')->where('type', 'trimestrielle');
         
+        // Apply search filter
         if ($search) {
             $query->whereHas('entreprise', function($q) use ($search) {
                 $q->where('nom', 'like', "%{$search}%");
             });
         }
         
-        $declarations = $query->orderBy('periode', 'desc')->paginate(10);
-        
-        if ($search) {
-            $declarations->appends(['search' => $search]);
+        // Apply periode filter
+        if ($periodeFilter) {
+            $query->where('periode', $periodeFilter);
         }
         
-        return view('tva-declarations.trimestriel.index', compact('declarations', 'search'));
+        // Apply sorting
+        if ($sortBy) {
+            switch ($sortBy) {
+                case 'nom_asc':
+                    $query->join('entreprises', 'tva_declarations.entreprise_id', '=', 'entreprises.id')
+                         ->orderBy('entreprises.nom', 'asc')
+                         ->select('tva_declarations.*');
+                    break;
+                case 'nom_desc':
+                    $query->join('entreprises', 'tva_declarations.entreprise_id', '=', 'entreprises.id')
+                         ->orderBy('entreprises.nom', 'desc')
+                         ->select('tva_declarations.*');
+                    break;
+                case 'periode_asc':
+                    $query->orderBy('periode', 'asc');
+                    break;
+                case 'periode_desc':
+                    $query->orderBy('periode', 'desc');
+                    break;
+                case 'montant_asc':
+                    $query->orderBy('montant', 'asc');
+                    break;
+                case 'montant_desc':
+                    $query->orderBy('montant', 'desc');
+                    break;
+                default:
+                    $query->orderBy('periode', 'desc');
+                    break;
+            }
+        } else {
+            $query->orderBy('periode', 'desc');
+        }
+        
+        // Get distinct periodes for filter dropdown
+        $periodes = TvaDeclaration::where('type', 'trimestrielle')
+                     ->select('periode')
+                     ->distinct()
+                     ->orderBy('periode', 'desc')
+                     ->pluck('periode')
+                     ->toArray();
+                     
+        $declarations = $query->paginate(10);
+        $declarations->appends($request->all());
+        
+        return view('tva-declarations.trimestriel.index', compact('declarations', 'search', 'periodes', 'periodeFilter', 'sortBy'));
     }
 
     /**
@@ -213,37 +305,124 @@ class TvaDeclarationController extends Controller
     public function getAnnuelle(Request $request)
     {
         $search = $request->input('search');
+        $periodeFilter = $request->input('periode_filter');
+        $sortBy = $request->input('sort_by');
         
         $query = TvaDeclaration::with('entreprise')->where('type', 'annuelle');
         
+        // Apply search filter
         if ($search) {
             $query->whereHas('entreprise', function($q) use ($search) {
                 $q->where('nom', 'like', "%{$search}%");
             });
         }
         
-        $declarations = $query->orderBy('periode', 'desc')->paginate(10);
-        
-        if ($search) {
-            $declarations->appends(['search' => $search]);
+        // Apply periode filter
+        if ($periodeFilter) {
+            $query->where('periode', $periodeFilter);
         }
         
-        return view('tva-declarations.annuel.index', compact('declarations', 'search'));
+        // Apply sorting
+        if ($sortBy) {
+            switch ($sortBy) {
+                case 'nom_asc':
+                    $query->join('entreprises', 'tva_declarations.entreprise_id', '=', 'entreprises.id')
+                         ->orderBy('entreprises.nom', 'asc')
+                         ->select('tva_declarations.*');
+                    break;
+                case 'nom_desc':
+                    $query->join('entreprises', 'tva_declarations.entreprise_id', '=', 'entreprises.id')
+                         ->orderBy('entreprises.nom', 'desc')
+                         ->select('tva_declarations.*');
+                    break;
+                case 'periode_asc':
+                    $query->orderBy('periode', 'asc');
+                    break;
+                case 'periode_desc':
+                    $query->orderBy('periode', 'desc');
+                    break;
+                case 'montant_asc':
+                    $query->orderBy('montant', 'asc');
+                    break;
+                case 'montant_desc':
+                    $query->orderBy('montant', 'desc');
+                    break;
+                default:
+                    $query->orderBy('periode', 'desc');
+                    break;
+            }
+        } else {
+            $query->orderBy('periode', 'desc');
+        }
+        
+        // Get distinct periodes (years) for filter dropdown
+        $periodes = TvaDeclaration::where('type', 'annuelle')
+                     ->select('periode')
+                     ->distinct()
+                     ->orderBy('periode', 'desc')
+                     ->pluck('periode')
+                     ->toArray();
+                     
+        $declarations = $query->paginate(10);
+        $declarations->appends($request->all());
+        
+        return view('tva-declarations.annuel.index', compact('declarations', 'search', 'periodes', 'periodeFilter', 'sortBy'));
     }
 
     private function getFilteredDeclarations(Request $request, string $periodeType)
     {
         $search = $request->input('search');
+        $periodeFilter = $request->input('periode_filter');
+        $sortBy = $request->input('sort_by');
         
         $query = TvaDeclaration::with('entreprise')->where('type', $periodeType);
 
+        // Apply search filter
         if ($search) {
             $query->whereHas('entreprise', function ($q) use ($search) {
                 $q->where('nom', 'like', "%{$search}%");
             });
         }
+        
+        // Apply periode filter
+        if ($periodeFilter) {
+            $query->where('periode', $periodeFilter);
+        }
+        
+        // Apply sorting
+        if ($sortBy) {
+            switch ($sortBy) {
+                case 'nom_asc':
+                    $query->join('entreprises', 'tva_declarations.entreprise_id', '=', 'entreprises.id')
+                         ->orderBy('entreprises.nom', 'asc')
+                         ->select('tva_declarations.*');
+                    break;
+                case 'nom_desc':
+                    $query->join('entreprises', 'tva_declarations.entreprise_id', '=', 'entreprises.id')
+                         ->orderBy('entreprises.nom', 'desc')
+                         ->select('tva_declarations.*');
+                    break;
+                case 'periode_asc':
+                    $query->orderBy('periode', 'asc');
+                    break;
+                case 'periode_desc':
+                    $query->orderBy('periode', 'desc');
+                    break;
+                case 'montant_asc':
+                    $query->orderBy('montant', 'asc');
+                    break;
+                case 'montant_desc':
+                    $query->orderBy('montant', 'desc');
+                    break;
+                default:
+                    $query->orderBy('periode', 'desc');
+                    break;
+            }
+        } else {
+            $query->orderBy('periode', 'desc');
+        }
 
-        return $query->orderBy('periode', 'desc')->get();
+        return $query->get();
     }
 
     /**
@@ -268,7 +447,12 @@ class TvaDeclarationController extends Controller
     public function exportMensuelleExcel(Request $request)
     {
         $search = $request->input('search');
-        return Excel::download(new TvaDeclarationsExport('mensuelle', $search), 'tva-mensuelle-' . date('Y-m-d_H-i-s') . '.xlsx');
+        $periodeFilter = $request->input('periode_filter');
+        $sortBy = $request->input('sort_by');
+        return Excel::download(
+            new TvaDeclarationsExport('mensuelle', $search, $periodeFilter, $sortBy), 
+            'tva-mensuelle-' . date('Y-m-d_H-i-s') . '.xlsx'
+        );
     }
 
     /**
@@ -293,7 +477,12 @@ class TvaDeclarationController extends Controller
     public function exportTrimestrielleExcel(Request $request)
     {
         $search = $request->input('search');
-        return Excel::download(new TvaDeclarationsExport('trimestrielle', $search), 'tva-trimestrielle-' . date('Y-m-d_H-i-s') . '.xlsx');
+        $periodeFilter = $request->input('periode_filter');
+        $sortBy = $request->input('sort_by');
+        return Excel::download(
+            new TvaDeclarationsExport('trimestrielle', $search, $periodeFilter, $sortBy), 
+            'tva-trimestrielle-' . date('Y-m-d_H-i-s') . '.xlsx'
+        );
     }
 
     /**
@@ -318,6 +507,11 @@ class TvaDeclarationController extends Controller
     public function exportAnnuelleExcel(Request $request)
     {
         $search = $request->input('search');
-        return Excel::download(new TvaDeclarationsExport('annuelle', $search), 'tva-annuelle-' . date('Y-m-d_H-i-s') . '.xlsx');
+        $periodeFilter = $request->input('periode_filter');
+        $sortBy = $request->input('sort_by');
+        return Excel::download(
+            new TvaDeclarationsExport('annuelle', $search, $periodeFilter, $sortBy), 
+            'tva-annuelle-' . date('Y-m-d_H-i-s') . '.xlsx'
+        );
     }
 }

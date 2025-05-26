@@ -11,11 +11,15 @@ class TvaDeclarationsExport implements FromQuery, WithHeadings, WithMapping
 {
     protected $periodeType; // e.g., 'mensuelle', 'trimestrielle', 'annuelle'
     protected $search;
+    protected $periodeFilter;
+    protected $sortBy;
 
-    public function __construct(string $periodeType, $search = null)
+    public function __construct(string $periodeType, $search = null, $periodeFilter = null, $sortBy = null)
     {
         $this->periodeType = $periodeType;
         $this->search = $search;
+        $this->periodeFilter = $periodeFilter;
+        $this->sortBy = $sortBy;
     }
 
     public function query()
@@ -31,14 +35,50 @@ class TvaDeclarationsExport implements FromQuery, WithHeadings, WithMapping
             $query->where('type', 'annuelle');
         }
 
+        // Apply search filter
         if ($this->search) {
             $query->whereHas('entreprise', function ($q) {
                 $q->where('nom', 'like', "%{$this->search}%");
             });
         }
-
-        // Add other relevant filters if needed, e.g., by year, specific period
-        $query->orderBy('date_declaration', 'desc');
+        
+        // Apply periode filter
+        if ($this->periodeFilter) {
+            $query->where('periode', $this->periodeFilter);
+        }
+        
+        // Apply sorting
+        if ($this->sortBy) {
+            switch ($this->sortBy) {
+                case 'nom_asc':
+                    $query->join('entreprises', 'tva_declarations.entreprise_id', '=', 'entreprises.id')
+                         ->orderBy('entreprises.nom', 'asc')
+                         ->select('tva_declarations.*');
+                    break;
+                case 'nom_desc':
+                    $query->join('entreprises', 'tva_declarations.entreprise_id', '=', 'entreprises.id')
+                         ->orderBy('entreprises.nom', 'desc')
+                         ->select('tva_declarations.*');
+                    break;
+                case 'periode_asc':
+                    $query->orderBy('periode', 'asc');
+                    break;
+                case 'periode_desc':
+                    $query->orderBy('periode', 'desc');
+                    break;
+                case 'montant_asc':
+                    $query->orderBy('montant', 'asc');
+                    break;
+                case 'montant_desc':
+                    $query->orderBy('montant', 'desc');
+                    break;
+                default:
+                    $query->orderBy('date_declaration', 'desc');
+                    break;
+            }
+        } else {
+            $query->orderBy('date_declaration', 'desc');
+        }
 
         return $query;
     }

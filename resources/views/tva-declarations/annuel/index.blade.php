@@ -13,14 +13,42 @@
                 @endif
             </div>
             <div class="card-body">
+                <!-- Search and Filter Form -->
+                <form method="GET" action="{{ route('tva-declaration.annuelle') }}" class="form-inline mb-4">
+                    <div class="form-group mr-2">
+                        <input type="text" name="search" class="form-control" placeholder="Rechercher par nom d'entreprise..." value="{{ $search ?? '' }}">
+                    </div>
+                    <div class="form-group mr-2">
+                        <select name="periode_filter" class="form-control">
+                            <option value="">Filtrer par année</option>
+                            @foreach($periodes as $periode)
+                                <option value="{{ $periode }}" {{ ($periode_filter ?? '') == $periode ? 'selected' : '' }}>{{ $periode }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group mr-2">
+                        <select name="sort_by" class="form-control">
+                            <option value="">Trier par</option>
+                            <option value="nom_asc" {{ ($sort_by ?? '') == 'nom_asc' ? 'selected' : '' }}>Entreprise (A-Z)</option>
+                            <option value="nom_desc" {{ ($sort_by ?? '') == 'nom_desc' ? 'selected' : '' }}>Entreprise (Z-A)</option>
+                            <option value="periode_asc" {{ ($sort_by ?? '') == 'periode_asc' ? 'selected' : '' }}>Année (Ancienne)</option>
+                            <option value="periode_desc" {{ ($sort_by ?? '') == 'periode_desc' ? 'selected' : '' }}>Année (Récente)</option>
+                            <option value="montant_asc" {{ ($sort_by ?? '') == 'montant_asc' ? 'selected' : '' }}>Montant (Croissant)</option>
+                            <option value="montant_desc" {{ ($sort_by ?? '') == 'montant_desc' ? 'selected' : '' }}>Montant (Décroissant)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-default">Filtrer</button>
+                    <a href="{{ route('tva-declaration.annuelle') }}" class="btn btn-sm btn-secondary ml-2">Réinitialiser</a>
+                </form>
+
                 <!-- Export Buttons -->
                 <div class="row mb-3">
                     <div class="col-12 text-right">
                         <div class="btn-group">
-                            <a href="{{ route('tva-declaration.annuelle.export.pdf') }}" class="btn btn-sm btn-info">
+                            <a href="{{ route('tva-declaration.annuelle.export.pdf', ['search' => $search ?? '', 'periode_filter' => $periode_filter ?? '', 'sort_by' => $sort_by ?? '']) }}" class="btn btn-sm btn-info">
                                 <i class="tim-icons icon-paper"></i> PDF
                             </a>
-                            <a href="{{ route('tva-declaration.annuelle.export.excel') }}" class="btn btn-sm btn-success">
+                            <a href="{{ route('tva-declaration.annuelle.export.excel', ['search' => $search ?? '', 'periode_filter' => $periode_filter ?? '', 'sort_by' => $sort_by ?? '']) }}" class="btn btn-sm btn-success">
                                 <i class="tim-icons icon-chart-bar-32"></i> Excel
                             </a>
                         </div>

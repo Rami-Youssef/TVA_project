@@ -27,9 +27,10 @@
             </select>
           </div>
           <button type="submit" class="btn btn-sm btn-default">Filtrer</button>
-          <a href="{{ route('entreprise.getAllEntreprises') }}" class="btn btn-sm btn-secondary ml-2">Réinitialiser</a>
-        </form>        <!-- Export Buttons -->
-        <div class="col-md-2 text-right mb-4">
+          <a href="{{ route('entreprise.getAllEntreprises') }}" class="btn btn-sm btn-secondary ml-2">Réinitialiser</a>        </form>
+        
+        <!-- Export Buttons -->
+        <div class="d-flex justify-content-end mb-4">
           <div class="btn-group">
             <a href="{{ route('entreprises.export.pdf', ['search' => $search ?? '', 'filter' => $filter ?? 'all', 'forme_juridique_filter' => $forme_juridique_filter ?? 'all']) }}" class="btn btn-sm btn-info">
               <i class="tim-icons icon-paper"></i> PDF
