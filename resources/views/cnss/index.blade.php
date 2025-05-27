@@ -11,9 +11,8 @@
                         </div>
                         <div class="col-4 text-right">
                             @if(Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin')
-                                <a href="{{ route('cnss.create') }}" class="btn btn-sm btn-primary">
-                                    {{ __('Ajouter une déclaration') }}
-                                </a>
+                                <a href="{{ route('cnss.create') }}" class="btn btn-success">
+                                    <i class="fas fa-plus"></i>                                </a>
                             @endif
                         </div>
                     </div>

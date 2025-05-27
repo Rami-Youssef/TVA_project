@@ -1,4 +1,4 @@
-@extends('layouts.app', ['page' => __('Users'), 'pageSlug' => 'users'])
+@extends('layouts.app', ['page' => __('Utilisateurs'), 'pageSlug' => 'users'])
 
 @section('content')
     <div class="row">
@@ -7,26 +7,26 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-8">
-                            <h4 class="card-title">Users</h4>
+                            <h4 class="card-title">Utilisateurs</h4>
                         </div>
                         <div class="col-4 text-right">
-                            <a href="{{ route('user.create') }}" class="btn btn-sm btn-primary">Add user</a>
+                            <a href="{{ route('user.create') }}" class="btn btn-success"><i class="fas fa-plus"></i></a>
                         </div>
                     </div>                    <!-- Search and Filter Form -->
                     <form method="GET" action="{{ route('user.index') }}" class="form-inline">
                         <div class="form-group mr-2">
-                            <input type="text" name="search" class="form-control" placeholder="Search by name or email" value="{{ $search ?? '' }}">
+                            <input type="text" name="search" class="form-control" placeholder="Rechercher par nom ou email" value="{{ $search ?? '' }}">
                         </div>
                         <div class="form-group mr-2">
                             <select name="role_filter" class="form-control">
-                                <option value="all">All Roles</option>
+                                <option value="all">Tous les Rôles</option>
                                 @foreach($roles as $role)
                                     <option value="{{ $role }}" {{ ($role_filter ?? '') == $role ? 'selected' : '' }}>{{ ucfirst($role) }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-sm btn-default">Filter</button>
-                        <a href="{{ route('user.index') }}" class="btn btn-sm btn-secondary ml-2">Reset</a>
+                        <button type="submit" class="btn btn-sm btn-default">Filtrer</button>
+                        <a href="{{ route('user.index') }}" class="btn btn-sm btn-secondary ml-2">Réinitialiser</a>
                     </form>
                 </div>
                 <div class="card-body">
