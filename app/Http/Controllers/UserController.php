@@ -10,6 +10,7 @@ use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Exports\UsersExport;
+use App\Exports\UserCurrentPageExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf; // Or your preferred PDF library
 
@@ -154,5 +155,46 @@ class UserController extends Controller
         $roleFilter = $request->input('role_filter');
 
         return Excel::download(new UsersExport($search, $roleFilter), 'users-'.date('Y-m-d_H-i-s').'.xlsx');
+    }
+    
+    public function exportCurrentPagePdf(Request $request)
+    {
+        $query = $this->getFilteredUsersQuery($request);
+        $page = $request->input('page', 1);
+        $perPage = 10; // Same as in index method
+        
+        // Get just the users from the current page
+        $users = $query->paginate($perPage, ['*'], 'page', $page);
+        
+        $pdf = Pdf::loadView('users.pdf', ['users' => $users]);
+        return $pdf->download('users-page-'.$page.'-'.date('Y-m-d_H-i-s').'.pdf');
+    }
+
+    public function exportCurrentPageExcel(Request $request)
+    {
+        // First, get the filtered query
+        $query = $this->getFilteredUsersQuery($request);
+        
+        // Get the pagination parameters
+        $page = (int) $request->input('page', 1);
+        $perPage = 10; // Same as in index method
+        
+        // Get just the IDs of users on the current page
+        $paginatedUsers = $query->paginate($perPage, ['id'], 'page', $page);
+        $userIds = $paginatedUsers->pluck('id')->toArray();
+        
+        // Log for debugging
+        \Log::info('Exporting current page Excel', [
+            'page' => $page,
+            'perPage' => $perPage,
+            'count' => count($userIds),
+            'userIds' => $userIds
+        ]);
+
+        // Create a new instance of UserCurrentPageExport with the specific user IDs
+        return Excel::download(
+            new UserCurrentPageExport($userIds), 
+            'users-page-'.$page.'-'.date('Y-m-d_H-i-s').'.xlsx'
+        );
     }
 }

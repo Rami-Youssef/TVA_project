@@ -48,6 +48,8 @@ Route::group(['middleware' => 'auth'], function () {
     // User Export Routes
     Route::get('users/export/pdf', [UserController::class, 'exportPdf'])->name('users.export.pdf');
     Route::get('users/export/excel', [UserController::class, 'exportExcel'])->name('users.export.excel');
+    Route::get('users/export/current-page/pdf', [UserController::class, 'exportCurrentPagePdf'])->name('users.export.current.pdf');
+    Route::get('users/export/current-page/excel', [UserController::class, 'exportCurrentPageExcel'])->name('users.export.current.excel');
 
     // Entreprise Export Routes
     Route::get('entreprises/export/pdf', [EntrepriseController::class, 'exportPdf'])->name('entreprises.export.pdf');
