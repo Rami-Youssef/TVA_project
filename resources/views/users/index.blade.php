@@ -34,24 +34,24 @@
                     <div class="row">
                         <div class="col-12 text-right">
                             <div class="dropdown">
-                                <button class="btn btn-primary dropdown-toggle" type="button" id="exportDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="tim-icons icon-cloud-download-93"></i> Exporter
+                                <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="exportDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="tim-icons icon-cloud-download-93 mr-1"></i> Exporter
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="exportDropdown">
                                     <h6 class="dropdown-header">Tous les utilisateurs</h6>
-                                    <a class="dropdown-item" href="{{ route('users.export.pdf', ['search' => request('search'), 'role_filter' => request('role_filter', 'all')]) }}">
-                                        <i class="tim-icons icon-paper"></i> Format PDF
+                                    <a class="dropdown-item d-flex align-items-center" href="{{ route('users.export.pdf', ['search' => request('search'), 'role_filter' => request('role_filter', 'all')]) }}">
+                                        <i class="tim-icons icon-paper mr-2"></i> Format PDF
                                     </a>
-                                    <a class="dropdown-item" href="{{ route('users.export.excel', ['search' => request('search'), 'role_filter' => request('role_filter', 'all')]) }}">
-                                        <i class="tim-icons icon-chart-bar-32"></i> Format Excel
+                                    <a class="dropdown-item d-flex align-items-center" href="{{ route('users.export.excel', ['search' => request('search'), 'role_filter' => request('role_filter', 'all')]) }}">
+                                        <i class="tim-icons icon-chart-bar-32 mr-2"></i> Format Excel
                                     </a>
                                     <div class="dropdown-divider"></div>
                                     <h6 class="dropdown-header">Page courante uniquement</h6>
-                                    <a class="dropdown-item" href="{{ route('users.export.current.pdf', ['search' => request('search'), 'role_filter' => request('role_filter', 'all'), 'page' => $users->currentPage()]) }}">
-                                        <i class="tim-icons icon-paper"></i> Format PDF
+                                    <a class="dropdown-item d-flex align-items-center" href="{{ route('users.export.current.pdf', ['search' => request('search'), 'role_filter' => request('role_filter', 'all'), 'page' => $users->currentPage()]) }}">
+                                        <i class="tim-icons icon-paper mr-2"></i> Format PDF
                                     </a>
-                                    <a class="dropdown-item" href="{{ route('users.export.current.excel', ['search' => request('search'), 'role_filter' => request('role_filter', 'all'), 'page' => $users->currentPage()]) }}">
-                                        <i class="tim-icons icon-chart-bar-32"></i> Format Excel
+                                    <a class="dropdown-item d-flex align-items-center" href="{{ route('users.export.current.excel', ['search' => request('search'), 'role_filter' => request('role_filter', 'all'), 'page' => $users->currentPage()]) }}">
+                                        <i class="tim-icons icon-chart-bar-32 mr-2"></i> Format Excel
                                     </a>
                                 </div>
                             </div>

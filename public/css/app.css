@@ -3,3 +3,47 @@ select option {
   color: black !important;
   background-color: white !important;
 }
+
+/* Export dropdown styling */
+.dropdown-menu {
+  background-color: #27293d !important;
+  border: 1px solid #2b3553 !important;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5) !important;
+  border-radius: 6px !important;
+  padding: 8px 0 !important;
+  min-width: 220px !important;
+}
+
+.dropdown-menu .dropdown-item {
+  color: #ffffff !important;
+  font-size: 0.9rem !important;
+  padding: 10px 16px !important;
+  transition: all 0.2s ease !important;
+}
+
+.dropdown-menu .dropdown-item:hover, 
+.dropdown-menu .dropdown-item:focus {
+  background-color: #e14eca !important;
+  background-image: linear-gradient(310deg, #7928ca, #e14eca) !important;
+  color: #ffffff !important;
+  transform: translateX(3px) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dropdown-menu .dropdown-header {
+  color: #1d8cf8 !important;
+  font-weight: bold !important;
+  font-size: 0.8rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
+  padding: 8px 16px !important;
+}
+
+.dropdown-menu .dropdown-divider {
+  border-top: 1px solid #2b3553 !important;
+  margin: 6px 0 !important;
+}
+
+.dropdown-item i {
+  font-size: 1.1rem !important;
+}
