@@ -23,11 +23,13 @@
                                 <label>{{ __('Email address') }}</label>
                                 <input type="email" name="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="{{ __('Email address') }}">
                                 @include('alerts.feedback', ['field' => 'email'])
-                            </div>
-
-                            <div class="form-group{{ $errors->has('role') ? ' has-danger' : '' }}">
-                                <label>{{ __('role') }}</label>
-                                <input type="text" name="role" class="form-control{{ $errors->has('role') ? ' is-invalid' : '' }}" placeholder="{{ __('role') }}">
+                            </div>                            <div class="form-group{{ $errors->has('role') ? ' has-danger' : '' }}">
+                                <label>{{ __('Role') }}</label>
+                                <select name="role" class="form-control{{ $errors->has('role') ? ' is-invalid' : '' }}">
+                                    <option value="user">User</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="super_admin">Super Admin</option>
+                                </select>
                                 @include('alerts.feedback', ['field' => 'role'])
                             </div>
                             <div class="form-group{{ $errors->has('password') ? ' has-danger' : '' }}">
