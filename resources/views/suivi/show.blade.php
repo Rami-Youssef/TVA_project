@@ -93,13 +93,27 @@
                 </div>                  <div class="card-body">
                     @include('alerts.success')                    <div class="row mb-3">
                         <div class="col-12 text-right">
-                            <div class="btn-group">
-                                <a href="{{ route('suivi.entreprise.export.pdf', ['id' => $entreprise->id, 'etat_filter' => $etat_filter ?? 'all', 'year_filter' => $year_filter ?? 'all', 'sort_by' => request('sort_by')]) }}" class="btn btn-sm btn-info">
-                                    <i class="tim-icons icon-paper"></i> PDF
-                                </a>
-                                <a href="{{ route('suivi.entreprise.export.excel', ['id' => $entreprise->id, 'etat_filter' => $etat_filter ?? 'all', 'year_filter' => $year_filter ?? 'all', 'sort_by' => request('sort_by')]) }}" class="btn btn-sm btn-success">
-                                    <i class="tim-icons icon-chart-bar-32"></i> Excel
-                                </a>
+                            <div class="dropdown">
+                                <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="exportDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="tim-icons icon-cloud-download-93 mr-1"></i> Exporter
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="exportDropdown">
+                                    <h6 class="dropdown-header">Toutes les déclarations</h6>
+                                    <a class="dropdown-item d-flex align-items-center" href="{{ route('suivi.entreprise.export.pdf', ['id' => $entreprise->id, 'etat_filter' => $etat_filter ?? 'all', 'year_filter' => $year_filter ?? 'all', 'sort_by' => request('sort_by')]) }}">
+                                        <i class="tim-icons icon-paper mr-2"></i> Format PDF
+                                    </a>
+                                    <a class="dropdown-item d-flex align-items-center" href="{{ route('suivi.entreprise.export.excel', ['id' => $entreprise->id, 'etat_filter' => $etat_filter ?? 'all', 'year_filter' => $year_filter ?? 'all', 'sort_by' => request('sort_by')]) }}">
+                                        <i class="tim-icons icon-chart-bar-32 mr-2"></i> Format Excel
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <h6 class="dropdown-header">Page courante uniquement</h6>
+                                    <a class="dropdown-item d-flex align-items-center" href="{{ route('suivi.entreprise.export.pdf', ['id' => $entreprise->id, 'etat_filter' => $etat_filter ?? 'all', 'year_filter' => $year_filter ?? 'all', 'sort_by' => request('sort_by'), 'page' => request('page', 1)]) }}">
+                                        <i class="tim-icons icon-paper mr-2"></i> Format PDF
+                                    </a>
+                                    <a class="dropdown-item d-flex align-items-center" href="{{ route('suivi.entreprise.export.excel', ['id' => $entreprise->id, 'etat_filter' => $etat_filter ?? 'all', 'year_filter' => $year_filter ?? 'all', 'sort_by' => request('sort_by'), 'page' => request('page', 1)]) }}">
+                                        <i class="tim-icons icon-chart-bar-32 mr-2"></i> Format Excel
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div><div class="table-responsive"><table class="table tablesorter table-hover" id="declarations-table">                            <thead class="text-primary">

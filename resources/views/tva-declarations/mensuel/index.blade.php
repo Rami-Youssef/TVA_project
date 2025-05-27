@@ -44,13 +44,27 @@
                 <!-- Export Buttons -->
                 <div class="row mb-3">
                     <div class="col-12 text-right">
-                        <div class="btn-group">
-                            <a href="{{ route('tva-declaration.mensuelle.export.pdf', ['search' => $search ?? '', 'periode_filter' => $periode_filter ?? '', 'sort_by' => $sort_by ?? '']) }}" class="btn btn-sm btn-info">
-                                <i class="tim-icons icon-paper"></i> PDF
-                            </a>
-                            <a href="{{ route('tva-declaration.mensuelle.export.excel', ['search' => $search ?? '', 'periode_filter' => $periode_filter ?? '', 'sort_by' => $sort_by ?? '']) }}" class="btn btn-sm btn-success">
-                                <i class="tim-icons icon-chart-bar-32"></i> Excel
-                            </a>
+                        <div class="dropdown">
+                            <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="exportDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="tim-icons icon-cloud-download-93 mr-1"></i> Exporter
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="exportDropdown">
+                                <h6 class="dropdown-header">Toutes les déclarations</h6>
+                                <a class="dropdown-item d-flex align-items-center" href="{{ route('tva-declaration.mensuelle.export.pdf', ['search' => $search ?? '', 'periode_filter' => $periode_filter ?? '', 'sort_by' => $sort_by ?? '']) }}">
+                                    <i class="tim-icons icon-paper mr-2"></i> Format PDF
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="{{ route('tva-declaration.mensuelle.export.excel', ['search' => $search ?? '', 'periode_filter' => $periode_filter ?? '', 'sort_by' => $sort_by ?? '']) }}">
+                                    <i class="tim-icons icon-chart-bar-32 mr-2"></i> Format Excel
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <h6 class="dropdown-header">Page courante uniquement</h6>
+                                <a class="dropdown-item d-flex align-items-center" href="{{ route('tva-declaration.mensuelle.export.pdf', ['search' => $search ?? '', 'periode_filter' => $periode_filter ?? '', 'sort_by' => $sort_by ?? '', 'page' => $declarations->currentPage()]) }}">
+                                    <i class="tim-icons icon-paper mr-2"></i> Format PDF
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="{{ route('tva-declaration.mensuelle.export.excel', ['search' => $search ?? '', 'periode_filter' => $periode_filter ?? '', 'sort_by' => $sort_by ?? '', 'page' => $declarations->currentPage()]) }}">
+                                    <i class="tim-icons icon-chart-bar-32 mr-2"></i> Format Excel
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

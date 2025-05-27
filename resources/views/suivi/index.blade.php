@@ -30,20 +30,6 @@
                 </div>
                 <div class="card-body">
                     @include('alerts.success')
-
-                    <!-- Export Buttons -->
-                    <div class="row mb-3">
-                        <div class="col-12 text-right">
-                            <div class="btn-group">
-                                <a href="{{ route('suivi.export.pdf', ['search' => $search ?? '']) }}" class="btn btn-sm btn-info">
-                                    <i class="tim-icons icon-paper"></i> PDF
-                                </a>
-                                <a href="{{ route('suivi.export.excel', ['search' => $search ?? '']) }}" class="btn btn-sm btn-success">
-                                    <i class="tim-icons icon-chart-bar-32"></i> Excel
-                                </a>
-                            </div>
-                        </div>
-                    </div>
                     
                     @if(count($entreprises) > 0)
                         <div class="row">

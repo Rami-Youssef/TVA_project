@@ -28,16 +28,29 @@
           </div>
           <button type="submit" class="btn btn-sm btn-default">Filtrer</button>
           <a href="{{ route('entreprise.getAllEntreprises') }}" class="btn btn-sm btn-secondary ml-2">Réinitialiser</a>        </form>
-        
-        <!-- Export Buttons -->
+          <!-- Export Buttons -->
         <div class="d-flex justify-content-end mb-4">
-          <div class="btn-group">
-            <a href="{{ route('entreprises.export.pdf', ['search' => $search ?? '', 'filter' => $filter ?? 'all', 'forme_juridique_filter' => $forme_juridique_filter ?? 'all']) }}" class="btn btn-sm btn-info">
-              <i class="tim-icons icon-paper"></i> PDF
-            </a>
-            <a href="{{ route('entreprises.export.excel', ['search' => $search ?? '', 'filter' => $filter ?? 'all', 'forme_juridique_filter' => $forme_juridique_filter ?? 'all']) }}" class="btn btn-sm btn-success">
-              <i class="tim-icons icon-chart-bar-32"></i> Excel
-            </a>
+          <div class="dropdown">
+            <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="exportDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="tim-icons icon-cloud-download-93 mr-1"></i> Exporter
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="exportDropdown">
+              <h6 class="dropdown-header">Toutes les sociétés</h6>
+              <a class="dropdown-item d-flex align-items-center" href="{{ route('entreprises.export.pdf', ['search' => $search ?? '', 'filter' => $filter ?? 'all', 'forme_juridique_filter' => $forme_juridique_filter ?? 'all']) }}">
+                <i class="tim-icons icon-paper mr-2"></i> Format PDF
+              </a>
+              <a class="dropdown-item d-flex align-items-center" href="{{ route('entreprises.export.excel', ['search' => $search ?? '', 'filter' => $filter ?? 'all', 'forme_juridique_filter' => $forme_juridique_filter ?? 'all']) }}">
+                <i class="tim-icons icon-chart-bar-32 mr-2"></i> Format Excel
+              </a>
+              <div class="dropdown-divider"></div>
+              <h6 class="dropdown-header">Page courante uniquement</h6>
+              <a class="dropdown-item d-flex align-items-center" href="{{ route('entreprises.export.pdf', ['search' => $search ?? '', 'filter' => $filter ?? 'all', 'forme_juridique_filter' => $forme_juridique_filter ?? 'all', 'page' => $entreprises->currentPage()]) }}">
+                <i class="tim-icons icon-paper mr-2"></i> Format PDF
+              </a>
+              <a class="dropdown-item d-flex align-items-center" href="{{ route('entreprises.export.excel', ['search' => $search ?? '', 'filter' => $filter ?? 'all', 'forme_juridique_filter' => $forme_juridique_filter ?? 'all', 'page' => $entreprises->currentPage()]) }}">
+                <i class="tim-icons icon-chart-bar-32 mr-2"></i> Format Excel
+              </a>
+            </div>
           </div>
         </div>
         
