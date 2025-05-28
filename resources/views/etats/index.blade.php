@@ -137,9 +137,8 @@
                             </div>
                         </div>
                     @endforeach
-                </div>
-                <div class="card-footer py-4">
-                    <nav class="d-flex justify-content-end" aria-label="...">
+                </div>                <div class="card-footer py-4">
+                    <nav class="d-flex justify-content-center" aria-label="...">
                         {{ $declarations->appends(request()->except('page'))->links() }}
                     </nav>
                 </div>
